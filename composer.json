@@ -1,0 +1,28 @@
+{
+	"name": "apache-solr-for-typo3/solr",
+	"type": "typo3-cms-extension",
+	"description": "Apache Solr integration for TYPO3",
+	"version": "3.0.3-dev",
+	"minimum-stability": "alpha",
+	"license": "GPL-2.0+",
+	"keywords": ["typo3", "TYPO3 CMS", "solr", "search"],
+	"homepage": "http://www.typo3-solr.com",
+	"authors": [
+		{
+			"name": "Ingo Renner",
+			"email": "ingo@typo3.org",
+			"role": "Lead Developer"
+		}
+	],
+	"support": {
+		"email": "typo3-project-solr@lists.typo3.org",
+		"issues": "https://github.com/TYPO3-Solr/ext-solr/issues",
+		"forum": "http://forum.typo3.org/index.php/f/53/",
+		"wiki": "https://forge.typo3.org/projects/extension-solr/wiki",
+		"source": "https://github.com/TYPO3-Solr/ext-solr"
+	},
+	"require": {
+		"php": ">=5.3.7 <6.0",
+		"typo3/cms-core": ">=6.2.14,<8.0"
+	}
+}
