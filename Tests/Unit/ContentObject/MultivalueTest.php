@@ -50,7 +50,7 @@ class Tx_Solr_ContentObject_MultivalueTest extends Tx_Phpunit_TestCase {
 		$list = 'abc, def, ghi, jkl, mno, pqr, stu, vwx, yz';
 		$expected = 'a:9:{i:0;s:3:"abc";i:1;s:3:"def";i:2;s:3:"ghi";i:3;s:3:"jkl";i:4;s:3:"mno";i:5;s:3:"pqr";i:6;s:3:"stu";i:7;s:3:"vwx";i:8;s:2:"yz";}';
 
-		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
 		$cObj->start(array('list' => $list));
 
 		$actual = $cObj->cObjGetSingle(
@@ -71,7 +71,7 @@ class Tx_Solr_ContentObject_MultivalueTest extends Tx_Phpunit_TestCase {
 		$list = 'abc, def, ghi, jkl, mno, pqr, stu, vwx, yz';
 		$expected = 'a:9:{i:0;s:3:"abc";i:1;s:3:"def";i:2;s:3:"ghi";i:3;s:3:"jkl";i:4;s:3:"mno";i:5;s:3:"pqr";i:6;s:3:"stu";i:7;s:3:"vwx";i:8;s:2:"yz";}';
 
-		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
 		$cObj->start(array());
 
 		$actual = $cObj->cObjGetSingle(

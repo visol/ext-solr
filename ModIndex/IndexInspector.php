@@ -30,7 +30,7 @@
  * @package	TYPO3
  * @subpackage	solr
  */
-class Tx_Solr_ModIndex_IndexInspector extends t3lib_extobjbase {
+class Tx_Solr_ModIndex_IndexInspector extends \TYPO3\CMS\Backend\Module\AbstractFunctionModule {
 
 	/**
 	 * The parent Web -> Info module's template
@@ -104,14 +104,7 @@ class Tx_Solr_ModIndex_IndexInspector extends t3lib_extobjbase {
 			)
 		);
 
-		$extJsExtensionCorePath = $this->document->backPath . '../t3lib/js/extjs/ux/';
-		if (file_exists($extJsExtensionCorePath . 'Ext.grid.RowExpander.js')) {
-				// TYPO3 4.5 and higher
-			$pageRenderer->addJsFile($extJsExtensionCorePath . 'Ext.grid.RowExpander.js');
-		} else {
-			$pageRenderer->addJsFile($this->document->backPath . $GLOBALS['PATHrel_solr'] . 'Resources/JavaScript/ExtJs/ux/Ext.grid.RowExpander.js');
-		}
-
+		$pageRenderer->addJsFile($this->document->backPath . $GLOBALS['PATHrel_solr'] . 'Resources/JavaScript/ExtJs/ux/Ext.grid.RowExpander.js');
 		$pageRenderer->addJsFile($this->document->backPath . $GLOBALS['PATHrel_solr'] . 'Resources/JavaScript/ExtJs/override/gridpanel.js');
 		$pageRenderer->addJsFile($this->document->backPath . $GLOBALS['PATHrel_solr'] . 'Resources/JavaScript/ModIndex/index_inspector.js');
 

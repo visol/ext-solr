@@ -83,7 +83,7 @@ abstract class Tx_Solr_IndexQueue_FrontendHelper_Abstract implements Tx_Solr_Ind
 		$this->response = $response;
 
 		if ($request->getParameter('loggingEnabled')) {
-			t3lib_div::devLog('Page indexer request received', 'solr', 0, array(
+			\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('Page indexer request received', 'solr', 0, array(
 				'request' => (array) $request,
 			));
 		}

@@ -47,7 +47,7 @@ class Tx_Solr_Report_SolrStatus implements tx_reports_StatusProvider {
 	 */
 	public function getStatus() {
 		$reports = array();
-		$this->connectionManager = t3lib_div::makeInstance('Tx_Solr_ConnectionManager');
+		$this->connectionManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_ConnectionManager');
 
 		$solrConnections = $this->connectionManager->getAllConfigurations();
 
@@ -96,7 +96,7 @@ class Tx_Solr_Report_SolrStatus implements tx_reports_StatusProvider {
 			$message .= '<li>schema.xml: ' . $solr->getSchemaName() . '</li>';
 			$message .= '<li>solrconfig.xml: ' . $solr->getSolrconfigName() . '</li>';
 
-			$accessFilterPluginStatus = t3lib_div::makeInstance('Tx_Solr_Report_AccessFilterPluginInstalledStatus');
+			$accessFilterPluginStatus = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Report_AccessFilterPluginInstalledStatus');
 			$accessFilterPluginVersion = $accessFilterPluginStatus->getInstalledPluginVersion($solr);
 
 			$message .= '<li>Access Filter Plugin: ' . $accessFilterPluginVersion . '</li>';
@@ -104,7 +104,7 @@ class Tx_Solr_Report_SolrStatus implements tx_reports_StatusProvider {
 
 		$message .= '</ul>';
 
-		return t3lib_div::makeInstance('tx_reports_reports_status_Status',
+		return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_reports_reports_status_Status',
 			'Apache Solr',
 			$value,
 			$message,

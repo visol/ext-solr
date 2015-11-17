@@ -93,7 +93,7 @@ class Tx_Solr_Facet_FacetOption {
 		$renderedFacetOption = $this->value;
 
 		if (isset($this->facetConfiguration['renderingInstruction'])) {
-			$contentObject = t3lib_div::makeInstance('tslib_cObj');
+			$contentObject = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
 			$contentObject->start(array(
 				'optionValue' => $this->value,
 				'optionCount' => $this->numberOfResults,
@@ -119,7 +119,7 @@ class Tx_Solr_Facet_FacetOption {
 	public function isSelectedInFacet($facetName) {
 		$isSelected = FALSE;
 
-		$resultParameters = t3lib_div::_GET('tx_solr');
+		$resultParameters = \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('tx_solr');
 		$filterParameters = array();
 		if (isset($resultParameters['filter'])) {
 			$filterParameters = (array) array_map('urldecode', $resultParameters['filter']);

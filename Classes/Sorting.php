@@ -50,7 +50,7 @@ class Tx_Solr_Sorting {
 	 */
 	public function getSortFields() {
 		$sortFields    = array();
-		$contentObject = t3lib_div::makeInstance('tslib_cObj');
+		$contentObject = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
 
 		foreach ($this->configuration as $optionName => $optionConfiguration) {
 			$fieldName = $contentObject->stdWrap(
@@ -72,7 +72,7 @@ class Tx_Solr_Sorting {
 	 */
 	public function getSortOptions() {
 		$sortOptions   = array();
-		$contentObject = t3lib_div::makeInstance('tslib_cObj');
+		$contentObject = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
 
 		foreach ($this->configuration as $optionName => $optionConfiguration) {
 			$optionField = $contentObject->stdWrap(
@@ -108,7 +108,7 @@ class Tx_Solr_Sorting {
 	 */
 	public function getSortFieldFromUrlParameter($urlParameters) {
 		$sortFields           = array();
-		$sortParameters       = t3lib_div::trimExplode(',', $urlParameters);
+		$sortParameters       = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $urlParameters);
 		$availableSortOptions = $this->getSortOptions();
 
 		foreach ($sortParameters as $sortParameter){

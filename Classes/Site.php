@@ -73,7 +73,7 @@ class Tx_Solr_Site {
 	 * @param integer $rootPageId Site root page ID (uid). The page must be marked as site root ("Use as Root Page" flag).
 	 */
 	public function __construct($rootPageId) {
-		$page = t3lib_BEfunc::getRecord('pages', $rootPageId);
+		$page = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord('pages', $rootPageId);
 
 		if (!$page['is_siteroot']) {
 			throw new InvalidArgumentException(
@@ -96,7 +96,7 @@ class Tx_Solr_Site {
 		$rootPageId = Tx_Solr_Util::getRootPageId($pageId);
 
 		if (!isset(self::$sitesCache[$rootPageId])) {
-			self::$sitesCache[$rootPageId] = t3lib_div::makeInstance(__CLASS__, $rootPageId);
+			self::$sitesCache[$rootPageId] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(__CLASS__, $rootPageId);
 		}
 
 		return self::$sitesCache[$rootPageId];
@@ -110,12 +110,12 @@ class Tx_Solr_Site {
 	public static function getAvailableSites() {
 		$sites = array();
 
-		$registry = t3lib_div::makeInstance('t3lib_Registry');
+		$registry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry');
 		$servers  = $registry->get('tx_solr', 'servers', array());
 
 		foreach ($servers as $server) {
 			if (!isset($sites[$server['rootPageUid']])) {
-				$sites[$server['rootPageUid']] = t3lib_div::makeInstance(__CLASS__, $server['rootPageUid']);
+				$sites[$server['rootPageUid']] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(__CLASS__, $server['rootPageUid']);
 			}
 		}
 
@@ -167,10 +167,10 @@ class Tx_Solr_Site {
 	 * @return	string	The site's main domain.
 	 */
 	public function getDomain() {
-		$pageSelect = t3lib_div::makeInstance('t3lib_pageSelect');
+		$pageSelect = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Page\\PageRepository');
 		$rootLine   = $pageSelect->getRootLine($this->rootPage['uid']);
 
-		return t3lib_BEfunc::firstDomainRecord($rootLine);
+		return \TYPO3\CMS\Backend\Utility\BackendUtility::firstDomainRecord($rootLine);
 	}
 
 	/**
@@ -182,7 +182,7 @@ class Tx_Solr_Site {
 	public function getLanguages() {
 		$siteLanguages = array();
 
-		$registry        = t3lib_div::makeInstance('t3lib_Registry');
+		$registry        = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry');
 		$solrConnections = $registry->get('tx_solr', 'servers');
 
 		foreach ($solrConnections as $connectionKey => $solrConnection) {
@@ -248,7 +248,7 @@ class Tx_Solr_Site {
 				$result = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 					'uid',
 					'pages',
-					'pid = ' . $recursionRootPageId . ' ' . t3lib_BEfunc::deleteClause('pages')
+					'pid = ' . $recursionRootPageId . ' ' . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('pages')
 				);
 
 				while ($page = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result)) {

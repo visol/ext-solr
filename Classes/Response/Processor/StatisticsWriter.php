@@ -71,7 +71,7 @@ class Tx_Solr_Response_Processor_StatisticsWriter implements Tx_Solr_ResponsePro
 	 * @param	Apache_Solr_Response	The response for the last query.
 	 */
 	public function processResponse(Tx_Solr_Query $query, Apache_Solr_Response $response) {
-		$urlParameters = t3lib_div::_GP('tx_solr');
+		$urlParameters = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('tx_solr');
 		$keywords      = $query->getKeywords();
 		$filters       = isset($urlParameters['filter']) ? $urlParameters['filter'] : array();
 
@@ -80,7 +80,7 @@ class Tx_Solr_Response_Processor_StatisticsWriter implements Tx_Solr_ResponsePro
 			return;
 		}
 
-		$keywords = t3lib_div::removeXSS($keywords);
+		$keywords = \TYPO3\CMS\Core\Utility\GeneralUtility::removeXSS($keywords);
 		$keywords = htmlentities($keywords, ENT_QUOTES, $GLOBALS['TSFE']->metaCharset);
 
 		$configuration = Tx_Solr_Util::getSolrConfiguration();
@@ -104,7 +104,7 @@ class Tx_Solr_Response_Processor_StatisticsWriter implements Tx_Solr_ResponsePro
 
 			'feuser_id'         => (int) $GLOBALS['TSFE']->fe_user->user['uid'],
 			'cookie'            => $GLOBALS['TSFE']->fe_user->id,
-			'ip'                => $this->applyIpMask(t3lib_div::getIndpEnv('REMOTE_ADDR'),$ipMaskLength),
+			'ip'                => $this->applyIpMask(\TYPO3\CMS\Core\Utility\GeneralUtility::getIndpEnv('REMOTE_ADDR'),$ipMaskLength),
 
 			'page'              => (int) $urlParameters['page'],
 			'keywords'          => $keywords,

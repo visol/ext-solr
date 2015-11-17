@@ -42,15 +42,15 @@ class Tx_Solr_GarbageCollector {
 	 * @param string $table The table the record belongs to
 	 * @param integer $uid The record's uid
 	 * @param string $value Not used
-	 * @param t3lib_TCEmain $tceMain TYPO3 Core Engine parent object, not used
+	 * @param \TYPO3\CMS\Core\DataHandling\DataHandler $tceMain TYPO3 Core Engine parent object, not used
 	 */
-	public function processCmdmap_preProcess($command, $table, $uid, $value, t3lib_TCEmain $tceMain) {
+	public function processCmdmap_preProcess($command, $table, $uid, $value, \TYPO3\CMS\Core\DataHandling\DataHandler $tceMain) {
 			// workspaces: collect garbage only for LIVE workspace
 		if ($command == 'delete' && $GLOBALS['BE_USER']->workspace == 0) {
 			$this->collectGarbage($table, $uid);
 
 			if ($table == 'pages') {
-				$indexQueue = t3lib_div::makeInstance('Tx_Solr_IndexQueue_Queue');
+				$indexQueue = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_IndexQueue_Queue');
 				$indexQueue->deleteItem($table, $uid);
 			}
 		}
@@ -63,9 +63,9 @@ class Tx_Solr_GarbageCollector {
 	 * @param string $table The table the record belongs to
 	 * @param integer $uid The record's uid
 	 * @param string $value Not used
-	 * @param t3lib_TCEmain $tceMain TYPO3 Core Engine parent object, not used
+	 * @param \TYPO3\CMS\Core\DataHandling\DataHandler $tceMain TYPO3 Core Engine parent object, not used
 	 */
-	public function processCmdmap_postProcess($command, $table, $uid, $value, t3lib_TCEmain $tceMain) {
+	public function processCmdmap_postProcess($command, $table, $uid, $value, \TYPO3\CMS\Core\DataHandling\DataHandler $tceMain) {
 			// workspaces: collect garbage only for LIVE workspace
 		if ($command == 'move' && $table == 'pages' && $GLOBALS['BE_USER']->workspace == 0) {
 				// TODO the below comment is not valid anymore, pid has been removed from doc ID
@@ -76,7 +76,7 @@ class Tx_Solr_GarbageCollector {
 			$this->collectGarbage($table, $uid);
 
 				// now re-index with new properties
-			$indexQueue = t3lib_div::makeInstance('Tx_Solr_IndexQueue_Queue');
+			$indexQueue = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_IndexQueue_Queue');
 			$indexQueue->updateItem($table, $uid);
 		}
 	}
@@ -89,9 +89,9 @@ class Tx_Solr_GarbageCollector {
 	 * @param array $incomingFields An array of incoming fields, new or changed, not used
 	 * @param string $table The table the record belongs to
 	 * @param mixed $uid The record's uid, [integer] or [string] (like 'NEW...')
-	 * @param t3lib_TCEmain $tceMain TYPO3 Core Engine parent object, not used
+	 * @param \TYPO3\CMS\Core\DataHandling\DataHandler $tceMain TYPO3 Core Engine parent object, not used
 	 */
-	public function processDatamap_preProcessFieldArray($incomingFields, $table, $uid, t3lib_TCEmain $tceMain) {
+	public function processDatamap_preProcessFieldArray($incomingFields, $table, $uid, \TYPO3\CMS\Core\DataHandling\DataHandler $tceMain) {
 		if (!is_int($uid)) {
 				// a newly created record, skip
 			return;
@@ -107,7 +107,7 @@ class Tx_Solr_GarbageCollector {
 		if (isset($GLOBALS['TCA'][$table]['ctrl']['enablecolumns'])
 			&& array_key_exists('fe_group', $GLOBALS['TCA'][$table]['ctrl']['enablecolumns'])) {
 
-			$record = t3lib_BEfunc::getRecord(
+			$record = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord(
 				$table,
 				$uid,
 				$visibilityAffectingFields,
@@ -130,9 +130,9 @@ class Tx_Solr_GarbageCollector {
 	 * @param string $table The table the record belongs to
 	 * @param mixed $uid The record's uid, [integer] or [string] (like 'NEW...')
 	 * @param array $fields The record's data, not used
-	 * @param t3lib_TCEmain $tceMain TYPO3 Core Engine parent object, not used
+	 * @param \TYPO3\CMS\Core\DataHandling\DataHandler $tceMain TYPO3 Core Engine parent object, not used
 	 */
-	public function processDatamap_afterDatabaseOperations($status, $table, $uid, array $fields, t3lib_TCEmain $tceMain) {
+	public function processDatamap_afterDatabaseOperations($status, $table, $uid, array $fields, \TYPO3\CMS\Core\DataHandling\DataHandler $tceMain) {
 		if ($status == 'new') {
 				// a newly created record, skip
 			return;
@@ -145,7 +145,7 @@ class Tx_Solr_GarbageCollector {
 
 		$garbageCollectionRelevantFields = $this->getVisibilityAffectingFieldsByTable($table);
 
-		$record = t3lib_BEfunc::getRecord($table, $uid, $garbageCollectionRelevantFields, '', FALSE);
+		$record = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($table, $uid, $garbageCollectionRelevantFields, '', FALSE);
 		$record = $this->normalizeFrontendGroupField($table, $record);
 
 		if ($this->isHidden($table, $record)
@@ -242,7 +242,7 @@ class Tx_Solr_GarbageCollector {
 	 * @return boolean True if the record is marked as being indexed
 	 */
 	protected function isMarkedAsIndexed($table, $record) {
-		$indexQueue = t3lib_div::makeInstance('Tx_Solr_IndexQueue_Queue');
+		$indexQueue = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_IndexQueue_Queue');
 		return $indexQueue->containsIndexedItem($table, $record['uid']);
 	}
 
@@ -311,7 +311,7 @@ class Tx_Solr_GarbageCollector {
 
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['postProcessGarbageCollector'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['postProcessGarbageCollector'] as $classReference) {
-				$garbageCollectorPostProcessor = t3lib_div::getUserObj($classReference);
+				$garbageCollectorPostProcessor = \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($classReference);
 
 				if ($garbageCollectorPostProcessor instanceof Tx_Solr_GarbageCollectorPostProcessor) {
 					$garbageCollectorPostProcessor->postProcessGarbageCollector($table, $uid);
@@ -350,7 +350,7 @@ class Tx_Solr_GarbageCollector {
 	 * @param integer $uid The record's uid.
 	 */
 	protected function collectRecordGarbage($table, $uid) {
-		$indexQueue = t3lib_div::makeInstance('Tx_Solr_IndexQueue_Queue');
+		$indexQueue = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_IndexQueue_Queue');
 
 		$this->deleteIndexDocuments($table, $uid);
 		$indexQueue->deleteItem($table, $uid);
@@ -364,11 +364,11 @@ class Tx_Solr_GarbageCollector {
 	 * @param integer $uid The record's uid.
 	 */
 	protected function collectPageGarbage($table, $uid) {
-		$indexQueue = t3lib_div::makeInstance('Tx_Solr_IndexQueue_Queue');
+		$indexQueue = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_IndexQueue_Queue');
 
 		switch ($table) {
 			case 'tt_content':
-				$contentElement = t3lib_BEfunc::getRecord('tt_content', $uid, 'uid, pid', '', FALSE);
+				$contentElement = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord('tt_content', $uid, 'uid, pid', '', FALSE);
 
 				$table = 'pages';
 				$uid   = $contentElement['pid'];
@@ -378,7 +378,7 @@ class Tx_Solr_GarbageCollector {
 				$indexQueue->updateItem($table, $uid);
 				break;
 			case 'pages_language_overlay':
-				$pageOverlayRecord = t3lib_BEfunc::getRecord('pages_language_overlay', $uid, 'uid, pid', '', FALSE);
+				$pageOverlayRecord = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord('pages_language_overlay', $uid, 'uid, pid', '', FALSE);
 
 				$table = 'pages';
 				$uid   = $pageOverlayRecord['pid'];
@@ -401,8 +401,8 @@ class Tx_Solr_GarbageCollector {
 	 * @param integer $uid The record's uid.
 	 */
 	protected function deleteIndexDocuments($table, $uid) {
-		$indexQueue        = t3lib_div::makeInstance('Tx_Solr_IndexQueue_Queue');
-		$connectionManager = t3lib_div::makeInstance('Tx_Solr_ConnectionManager');
+		$indexQueue        = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_IndexQueue_Queue');
+		$connectionManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_ConnectionManager');
 
 			// record can be indexed for multiple sites
 		$indexQueueItems = $indexQueue->getItems($table, $uid);

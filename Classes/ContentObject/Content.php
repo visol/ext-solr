@@ -47,7 +47,7 @@ class Tx_Solr_ContentObject_Content {
 	 * @return	string	serialized array representation of the given list
 	 */
 	public function cObjGetSingleExt($name, array $configuration, $TyposcriptKey, $contentObject) {
-		$contentExtractor = t3lib_div::makeInstance(
+		$contentExtractor = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
 			'Tx_Solr_HtmlContentExtractor',
 			$this->getRawContent($contentObject, $configuration)
 		);

@@ -112,7 +112,7 @@ class Tx_Solr_Scheduler_ReIndexTaskAdditionalFieldProvider implements tx_schedul
 		$this->schedulerModule->doc->getPageRenderer()->addCssFile('../typo3conf/ext/solr/Resources/Css/Backend/indexingconfigurationselectorfield.css');
 
 		if (!is_null($this->site)) {
-			$selectorField = t3lib_div::makeInstance(
+			$selectorField = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
 				'Tx_Solr_Backend_IndexingConfigurationSelectorField',
 				$this->site
 			);
@@ -153,7 +153,7 @@ class Tx_Solr_Scheduler_ReIndexTaskAdditionalFieldProvider implements tx_schedul
 	 * @param	tx_scheduler_Task	$task: reference to the current task object
 	 */
 	public function saveAdditionalFields(array $submittedData, tx_scheduler_Task $task) {
-		$task->setSite(t3lib_div::makeInstance('Tx_Solr_Site', $submittedData['site']));
+		$task->setSite(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Site', $submittedData['site']));
 
 		$indexingConfigurations = array();
 		if (!empty($submittedData['indexingConfigurations'])) {

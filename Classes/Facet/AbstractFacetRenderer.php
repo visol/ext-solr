@@ -89,7 +89,7 @@ abstract class Tx_Solr_Facet_AbstractFacetRenderer implements Tx_Solr_FacetRende
 	 * @param Tx_Solr_Facet_Facet $facet The facet to render.
 	 */
 	public function __construct(Tx_Solr_Facet_Facet $facet) {
-		$this->search = t3lib_div::makeInstance('Tx_Solr_Search');
+		$this->search = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Search');
 
 		$this->facet              = $facet;
 		$this->facetName          = $facet->getName();
@@ -98,7 +98,7 @@ abstract class Tx_Solr_Facet_AbstractFacetRenderer implements Tx_Solr_FacetRende
 		$this->facetConfiguration = $this->solrConfiguration['search.']['faceting.']['facets.'][$this->facetName . '.'];
 		$this->linkTargetPageId   = $GLOBALS['TSFE']->id;
 
-		$this->queryLinkBuilder = t3lib_div::makeInstance('Tx_Solr_Query_LinkBuilder', $this->search->getQuery());
+		$this->queryLinkBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Query_LinkBuilder', $this->search->getQuery());
 	}
 
 	/**
@@ -168,7 +168,7 @@ abstract class Tx_Solr_Facet_AbstractFacetRenderer implements Tx_Solr_FacetRende
 		$facet['empty']     = $this->facet->isEmpty() ? '1' : '0';
 		$facet['reset_url'] = $this->buildResetFacetUrl();
 
-		$contentObject = t3lib_div::makeInstance('tslib_cObj');
+		$contentObject = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
 		$facet['label'] = $contentObject->stdWrap(
 			$this->facetConfiguration['label'],
 			$this->facetConfiguration['label.']
@@ -223,7 +223,7 @@ abstract class Tx_Solr_Facet_AbstractFacetRenderer implements Tx_Solr_FacetRende
 	 */
 	protected function buildResetFacetUrl() {
 		$resetFacetUrl    = '';
-		$resultParameters = t3lib_div::_GPmerged('tx_solr');
+		$resultParameters = \TYPO3\CMS\Core\Utility\GeneralUtility::_GPmerged('tx_solr');
 
 		if (is_array($resultParameters['filter'])) {
 				// urldecode the array to get the original representation

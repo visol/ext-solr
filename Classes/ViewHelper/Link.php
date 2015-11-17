@@ -51,7 +51,7 @@ class Tx_Solr_ViewHelper_Link implements Tx_Solr_ViewHelper {
 	 */
 	public function __construct(array $arguments = array()) {
 		if(is_null($this->contentObject)) {
-			$this->contentObject = t3lib_div::makeInstance('tslib_cObj');
+			$this->contentObject = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
 		}
 	}
 
@@ -88,7 +88,7 @@ class Tx_Solr_ViewHelper_Link implements Tx_Solr_ViewHelper {
 						throw $e;
 					}
 				}
-			} elseif (t3lib_div::isValidUrl($linkArgument) || t3lib_div::isValidUrl(t3lib_div::getIndpEnv('TYPO3_REQUEST_HOST') . '/' . $linkArgument)) {
+			} elseif (\TYPO3\CMS\Core\Utility\GeneralUtility::isValidUrl($linkArgument) || \TYPO3\CMS\Core\Utility\GeneralUtility::isValidUrl(\TYPO3\CMS\Core\Utility\GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/' . $linkArgument)) {
 					// $linkTarget is an URL
 				$linkTarget = filter_var($linkArgument, FILTER_SANITIZE_URL);
 			}

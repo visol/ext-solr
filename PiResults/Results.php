@@ -118,7 +118,7 @@ class Tx_Solr_PiResults_Results extends Tx_Solr_PluginBase_CommandPluginBase {
 
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['processSearchResponse'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['processSearchResponse'] as $classReference) {
-				$responseProcessor = t3lib_div::getUserObj($classReference);
+				$responseProcessor = \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($classReference);
 
 				if ($responseProcessor instanceof Tx_Solr_ResponseProcessor) {
 					$responseProcessor->processResponse($query, $response);
@@ -134,13 +134,13 @@ class Tx_Solr_PiResults_Results extends Tx_Solr_PluginBase_CommandPluginBase {
 	 */
 	protected function preRender() {
 		if($this->conf['cssFiles.']['results']) {
-			$cssFile = t3lib_div::createVersionNumberedFilename($GLOBALS['TSFE']->tmpl->getFileName($this->conf['cssFiles.']['results']));
+			$cssFile = \TYPO3\CMS\Core\Utility\GeneralUtility::createVersionNumberedFilename($GLOBALS['TSFE']->tmpl->getFileName($this->conf['cssFiles.']['results']));
 			$GLOBALS['TSFE']->additionalHeaderData['tx_solr-resultsCss'] =
 				'<link href="' . $cssFile . '" rel="stylesheet" type="text/css" />';
 		}
 
 		if($this->conf['cssFiles.']['pagebrowser']) {
-			$cssFile = t3lib_div::createVersionNumberedFilename($GLOBALS['TSFE']->tmpl->getFileName($this->conf['cssFiles.']['pagebrowser']));
+			$cssFile = \TYPO3\CMS\Core\Utility\GeneralUtility::createVersionNumberedFilename($GLOBALS['TSFE']->tmpl->getFileName($this->conf['cssFiles.']['pagebrowser']));
 			$GLOBALS['TSFE']->additionalHeaderData['tx_solr-pageBrowserCss'] =
 				'<link href="' . $cssFile . '" rel="stylesheet" type="text/css" />';
 		}
@@ -152,7 +152,7 @@ class Tx_Solr_PiResults_Results extends Tx_Solr_PluginBase_CommandPluginBase {
 	 * @see Tx_Solr_pluginbase_CommandPluginBase#getCommandResolver()
 	 */
 	protected function getCommandResolver() {
-		return t3lib_div::makeInstance('Tx_Solr_CommandResolver');
+		return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_CommandResolver');
 	}
 
 	/**
@@ -193,7 +193,7 @@ class Tx_Solr_PiResults_Results extends Tx_Solr_PluginBase_CommandPluginBase {
 		$rawUserQuery = $this->getRawUserQuery();
 
 		/* @var $query	Tx_Solr_Query */
-		$query = t3lib_div::makeInstance('Tx_Solr_Query', $rawUserQuery);
+		$query = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Query', $rawUserQuery);
 
 		$this->initializeAdditionalFilters($query);
 
@@ -201,13 +201,13 @@ class Tx_Solr_PiResults_Results extends Tx_Solr_PluginBase_CommandPluginBase {
 		if ($this->solrAvailable && (isset($rawUserQuery) || $this->conf['search.']['initializeWithEmptyQuery'] || $this->conf['search.']['initializeWithQuery'])) {
 
 			if ($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_solr.']['logging.']['query.']['searchWords']) {
-				t3lib_div::devLog('received search query', 'solr', 0, array($rawUserQuery));
+				\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('received search query', 'solr', 0, array($rawUserQuery));
 			}
 
 			$resultsPerPage = $this->getNumberOfResultsPerPage();
 			$query->setResultsPerPage($resultsPerPage);
 
-			$searchComponents = t3lib_div::makeInstance('Tx_Solr_Search_SearchComponentManager')->getSearchComponents();
+			$searchComponents = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Search_SearchComponentManager')->getSearchComponents();
 			foreach ($searchComponents as $searchComponent) {
 				$searchComponent->setSearchConfiguration($this->conf['search.']);
 
@@ -275,7 +275,7 @@ class Tx_Solr_PiResults_Results extends Tx_Solr_PluginBase_CommandPluginBase {
 			// flexform overwrites _all_ filters set through TypoScript
 		$flexformFilters = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'filter', 'sQuery');
 		if (!empty($flexformFilters)) {
-			$additionalFilters = t3lib_div::trimExplode('|', $flexformFilters);
+			$additionalFilters = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode('|', $flexformFilters);
 		}
 
 		$this->additionalFilters = $additionalFilters;
@@ -405,7 +405,7 @@ class Tx_Solr_PiResults_Results extends Tx_Solr_PluginBase_CommandPluginBase {
 		$currentUrl = $this->pi_linkTP_keepPIvars_url();
 
 		if ($this->solrAvailable && $this->search->hasSearched()) {
-			$queryLinkBuilder = t3lib_div::makeInstance('Tx_Solr_Query_LinkBuilder', $this->search->getQuery());
+			$queryLinkBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Query_LinkBuilder', $this->search->getQuery());
 			$currentUrl = $queryLinkBuilder->getQueryUrl();
 		}
 
@@ -427,11 +427,11 @@ class Tx_Solr_PiResults_Results extends Tx_Solr_PluginBase_CommandPluginBase {
 	 */
 	public function getNumberOfResultsPerPage() {
 		$configuration = Tx_Solr_Util::getSolrConfiguration();
-		$resultsPerPageSwitchOptions = t3lib_div::intExplode(',', $configuration['search.']['results.']['resultsPerPageSwitchOptions']);
+		$resultsPerPageSwitchOptions = \TYPO3\CMS\Core\Utility\GeneralUtility::intExplode(',', $configuration['search.']['results.']['resultsPerPageSwitchOptions']);
 
 		$solrParameters     = array();
-		$solrPostParameters = t3lib_div::_POST('tx_solr');
-		$solrGetParameters  = t3lib_div::_GET('tx_solr');
+		$solrPostParameters = \TYPO3\CMS\Core\Utility\GeneralUtility::_POST('tx_solr');
+		$solrGetParameters  = \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('tx_solr');
 
 			// check for GET parameters, POST takes precedence
 		if (isset($solrGetParameters) && is_array($solrGetParameters)) {

@@ -52,7 +52,7 @@ class Tx_Solr_Facet_SimpleFacetRenderer extends Tx_Solr_Facet_AbstractFacetRende
 		$facetOptions = $this->getFacetOptions();
 
 		if (!empty($facetOptions) || !empty($this->facetConfiguration['showEvenWhenEmpty'])) {
-			$facetOptionsRenderer = t3lib_div::makeInstance(
+			$facetOptionsRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
 				'Tx_Solr_Facet_SimpleFacetOptionsRenderer',
 				$this->facetName,
 				$facetOptions,

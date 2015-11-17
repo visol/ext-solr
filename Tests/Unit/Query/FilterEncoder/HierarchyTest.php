@@ -38,7 +38,7 @@ class Tx_Solr_Query_FilterEncoder_HierarchyTest extends Tx_Phpunit_TestCase {
 	private $parser;
 
 	public function setUp() {
-		$this->parser = t3lib_div::makeInstance('Tx_Solr_Query_FilterEncoder_Hierarchy');
+		$this->parser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Query_FilterEncoder_Hierarchy');
 	}
 
 	/**

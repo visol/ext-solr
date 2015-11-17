@@ -60,12 +60,12 @@ class Tx_Solr_Facet_HierarchicalFacetRenderer extends Tx_Solr_Facet_AbstractFace
 		$facetOptions = $this->getFacetOptions();
 
 		/* @var $filterEncoder Tx_Solr_Query_FilterEncoder_Hierarchy */
-		$filterEncoder = t3lib_div::makeInstance('Tx_Solr_Query_FilterEncoder_Hierarchy');
+		$filterEncoder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Query_FilterEncoder_Hierarchy');
 
 			// enrich the facet options with links before building the menu structure
 		$enrichedFacetOptions = array();
 		foreach ($facetOptions as $facetOptionValue => $facetOptionResultCount) {
-			$facetOption = t3lib_div::makeInstance('Tx_Solr_Facet_FacetOption',
+			$facetOption = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Facet_FacetOption',
 				$this->facetName,
 				$facetOptionValue,
 				$facetOptionResultCount
@@ -74,7 +74,7 @@ class Tx_Solr_Facet_HierarchicalFacetRenderer extends Tx_Solr_Facet_AbstractFace
 			/* @var $facetOption Tx_Solr_Facet_FacetOption */
 			$facetOption->setUrlValue($filterEncoder->encodeFilter($facetOptionValue));
 
-			$facetLinkBuilder = t3lib_div::makeInstance('Tx_Solr_Facet_LinkBuilder', $this->search->getQuery(), $this->facetName, $facetOption);
+			$facetLinkBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Facet_LinkBuilder', $this->search->getQuery(), $this->facetName, $facetOption);
 
 			$optionSelected = $facetOption->isSelectedInFacet($this->facetName);
 			$optionLinkUrl  = $facetLinkBuilder->getAddFacetOptionUrl();
@@ -116,7 +116,7 @@ class Tx_Solr_Facet_HierarchicalFacetRenderer extends Tx_Solr_Facet_AbstractFace
 			// assuming a rendering instruction is always set for hierarchical facets
 			// passing field name and facet options to the necessary userFunc
 		/* @var $contentObject tslib_cObj */
-		$contentObject = t3lib_div::makeInstance('tslib_cObj');
+		$contentObject = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
 		$contentObject->start(array(
 			'facetFieldName' => $this->facetConfiguration['field'],
 			'facetOptions'   => $facetOptions

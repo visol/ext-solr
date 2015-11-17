@@ -68,10 +68,10 @@ class Tx_Solr_ModIndex_IndexInspectorRemoteController {
 	 * @return	void
 	 */
 	protected function initializeSearch() {
-		$connectionManager = t3lib_div::makeInstance('Tx_Solr_ConnectionManager');
+		$connectionManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_ConnectionManager');
 		$solrConnection = $connectionManager->getConnectionByPageId($this->pageId);
 
-		$this->search = t3lib_div::makeInstance('Tx_Solr_Search', $solrConnection);
+		$this->search = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Search', $solrConnection);
 	}
 
 	/**
@@ -109,7 +109,7 @@ class Tx_Solr_ModIndex_IndexInspectorRemoteController {
 	 * @return	array	An array of Apache_Solr_Document objects
 	 */
 	protected function getIndexDocuments() {
-		$query = t3lib_div::makeInstance('Tx_Solr_Query', '');
+		$query = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Query', '');
 		$query->setQueryType('standard');
 		$query->useRawQueryString(TRUE);
 		$query->setQueryString('*:*');

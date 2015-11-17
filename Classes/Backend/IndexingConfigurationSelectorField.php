@@ -107,7 +107,7 @@ class Tx_Solr_Backend_IndexingConfigurationSelectorField {
 	 *  @return string Markup for the select field
 	 */
 	public function render() {
-		$tceForm = t3lib_div::makeInstance('t3lib_TCEforms');
+		$tceForm = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Form\\FormEngine');
 
 			// transform selected values into the format used by TCEforms
 		$selectedValues = array();

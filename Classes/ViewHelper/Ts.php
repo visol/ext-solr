@@ -108,7 +108,7 @@ class Tx_Solr_ViewHelper_Ts implements Tx_Solr_ViewHelper {
 	 */
 	protected function getContentObject() {
 		if (is_null($this->contentObject)) {
-			$this->contentObject = t3lib_div::makeInstance('tslib_cObj');
+			$this->contentObject = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
 		}
 
 		return $this->contentObject;

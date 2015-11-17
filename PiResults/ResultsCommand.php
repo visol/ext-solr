@@ -112,7 +112,7 @@ class Tx_Solr_PiResults_ResultsCommand implements Tx_Solr_PluginCommand {
 
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['modifyResultSet'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['modifyResultSet'] as $classReference) {
-				$resultSetModifier = t3lib_div::getUserObj($classReference);
+				$resultSetModifier = \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($classReference);
 
 				if ($resultSetModifier instanceof Tx_Solr_ResultSetModifier) {
 					$responseDocuments = $resultSetModifier->modifyResultSet($this, $responseDocuments);
@@ -131,7 +131,7 @@ class Tx_Solr_PiResults_ResultsCommand implements Tx_Solr_PluginCommand {
 
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['modifyResultDocument'])) {
 				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['modifyResultDocument'] as $classReference) {
-					$resultDocumentModifier = t3lib_div::getUserObj($classReference);
+					$resultDocumentModifier = \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($classReference);
 
 					if ($resultDocumentModifier instanceof Tx_Solr_ResultDocumentModifier) {
 						$temporaryResultDocument = $resultDocumentModifier->modifyResultDocument($this, $temporaryResultDocument);
@@ -202,7 +202,7 @@ class Tx_Solr_PiResults_ResultsCommand implements Tx_Solr_PluginCommand {
 
 	protected function renderDocumentFields(array $document) {
 		$renderingInstructions = $this->configuration['search.']['results.']['fieldRenderingInstructions.'];
-		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
 		$cObj->start($document);
 
 		foreach ($renderingInstructions as $renderingInstructionName => $renderingInstruction) {
@@ -232,7 +232,7 @@ class Tx_Solr_PiResults_ResultsCommand implements Tx_Solr_PluginCommand {
 			$numberOfPages  = intval($numberOfResults / $resultsPerPage)
 				+ (($numberOfResults % $resultsPerPage) == 0 ? 0 : 1);
 
-			$solrGetParameters = t3lib_div::_GET('tx_solr');
+			$solrGetParameters = \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('tx_solr');
 			if (!is_array($solrGetParameters)) {
 				$solrGetParameters = array();
 			}
@@ -243,13 +243,13 @@ class Tx_Solr_PiResults_ResultsCommand implements Tx_Solr_PluginCommand {
 				array(
 					'pageParameterName' => 'tx_solr|page',
 					'numberOfPages'     => $numberOfPages,
-					'extraQueryString'  => t3lib_div::implodeArrayForUrl('tx_solr', $solrGetParameters),
+					'extraQueryString'  => \TYPO3\CMS\Core\Utility\GeneralUtility::implodeArrayForUrl('tx_solr', $solrGetParameters),
 					'templateFile'      => $this->configuration['templateFiles.']['pagebrowser']
 				)
 			);
 
 				// Get page browser
-			$cObj = t3lib_div::makeInstance('tslib_cObj');
+			$cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
 			$cObj->start(array(), '');
 
 			$cObjectType = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_pagebrowse_pi1'];
@@ -307,7 +307,7 @@ class Tx_Solr_PiResults_ResultsCommand implements Tx_Solr_PluginCommand {
 	 */
 	protected function isFilteredByUser() {
 		$userFiltered = FALSE;
-		$resultParameters = t3lib_div::_GET('tx_solr');
+		$resultParameters = \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('tx_solr');
 
 		if (isset($resultParameters['filter'])) {
 			$userFiltered = TRUE;

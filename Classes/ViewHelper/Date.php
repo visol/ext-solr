@@ -48,7 +48,7 @@ class Tx_Solr_ViewHelper_Date implements Tx_Solr_ViewHelper {
 	public function __construct(array $arguments = array()) {
 		if(is_null($this->dateFormat) || is_null($this->contentObject)) {
 			$this->dateFormat = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_solr.']['general.']['dateFormat.'];
-			$this->contentObject = t3lib_div::makeInstance('tslib_cObj');
+			$this->contentObject = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
 		}
 	}
 

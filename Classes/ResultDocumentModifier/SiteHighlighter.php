@@ -48,7 +48,7 @@ class Tx_Solr_ResultDocumentModifier_SiteHighlighter implements Tx_Solr_ResultDo
 
 			// remove quotes from phrase searches - they've been escaped by getCleanUserQuery()
 		$searchWords = str_replace('&quot;', '', $searchWords);
-		$searchWords = t3lib_div::trimExplode(' ', $searchWords, TRUE);
+		$searchWords = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(' ', $searchWords, TRUE);
 
 		$url = $resultDocument['url'];
 		$fragment = '';

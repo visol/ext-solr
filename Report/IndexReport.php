@@ -49,7 +49,7 @@ class Tx_Solr_Report_IndexReport implements tx_reports_Report {
 
 		$this->reportsModule->doc->addStyleSheet(
 			'tx_solr',
-			'../' . t3lib_extMgm::siteRelPath('solr') . 'Resources/Css/Report/index.css'
+			'../' . \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath('solr') . 'Resources/Css/Report/index.css'
 		);
 	}
 
@@ -68,11 +68,11 @@ class Tx_Solr_Report_IndexReport implements tx_reports_Report {
 
 			$content = $this->renderData($data);
 		} catch (Exception $e) {
-			$message = t3lib_div::makeInstance(
-				't3lib_FlashMessage',
+			$message = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+				'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
 				'Failed to establish Solr connection.',
 				'',
-				t3lib_FlashMessage::ERROR,
+				\TYPO3\CMS\Core\Messaging\FlashMessage::ERROR,
 				TRUE
 			);
 
@@ -92,7 +92,7 @@ class Tx_Solr_Report_IndexReport implements tx_reports_Report {
 	 */
 	protected function renderData(Apache_Solr_Response $data) {
 		$content  = '';
-		$registry = t3lib_div::makeInstance('t3lib_Registry');
+		$registry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry');
 		$limit    = $registry->get('tx_solr', 'luke.limit', 20000);
 
 		$numberOfDocuments = $data->index->numDocs;
@@ -169,16 +169,16 @@ class Tx_Solr_Report_IndexReport implements tx_reports_Report {
 		);
 
 			// updating module settings after modifying MOD_MENU
-		$this->reportsModule->MOD_SETTINGS = t3lib_BEfunc::getModuleData(
+		$this->reportsModule->MOD_SETTINGS = \TYPO3\CMS\Backend\Utility\BackendUtility::getModuleData(
 			$this->reportsModule->MOD_MENU,
-			t3lib_div::_GP('SET'),
+			\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('SET'),
 			$this->reportsModule->MCONF['name'],
 			$this->reportsModule->modMenu_type,
 			$this->reportsModule->modMenu_dontValidateList,
 			$this->reportsModule->modMenu_setDefaultList
 		);
 
-		$connectionMenu = 'Solr Server: ' . t3lib_BEfunc::getFuncMenu(
+		$connectionMenu = 'Solr Server: ' . \TYPO3\CMS\Backend\Utility\BackendUtility::getFuncMenu(
 			0,
 			'SET[tx_solr_connection]',
 			$this->reportsModule->MOD_SETTINGS['tx_solr_connection'],
@@ -203,7 +203,7 @@ class Tx_Solr_Report_IndexReport implements tx_reports_Report {
 			}
 		}
 
-		$solr = t3lib_div::makeInstance('Tx_Solr_ConnectionManager')->getConnection(
+		$solr = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_ConnectionManager')->getConnection(
 			$solrServer['solrHost'],
 			$solrServer['solrPort'],
 			$solrServer['solrPath'],
@@ -222,7 +222,7 @@ class Tx_Solr_Report_IndexReport implements tx_reports_Report {
 	}
 
 	protected function getConfiguredSolrConnections() {
-		$registry = t3lib_div::makeInstance('t3lib_Registry');
+		$registry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry');
 		$configuredSolrConnections = $registry->get('tx_solr', 'servers', array());
 
 		return $configuredSolrConnections;

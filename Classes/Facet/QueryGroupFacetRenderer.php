@@ -52,7 +52,7 @@ class Tx_Solr_Facet_QueryGroupFacetRenderer extends Tx_Solr_Facet_SimpleFacetRen
 		$facetOptions    = array();
 		$facetOptionsRaw = parent::getFacetOptions();
 
-		$filterEncoder = t3lib_div::makeInstance('Tx_Solr_Query_FilterEncoder_QueryGroup');
+		$filterEncoder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Query_FilterEncoder_QueryGroup');
 		foreach ($facetOptionsRaw as $facetOption => $numberOfResults) {
 			$facetOption = $filterEncoder->encodeFilter($facetOption, $this->facetConfiguration);
 			$facetOptions[$facetOption] = $numberOfResults;

@@ -107,7 +107,7 @@ class Tx_Solr_Facet_LinkBuilder extends Tx_Solr_Query_LinkBuilder {
 	 * @return array An array of filter parameters
 	 */
 	protected function addFacetAndEncodeFilterParameters() {
-		$resultParameters = t3lib_div::_GPmerged('tx_solr');
+		$resultParameters = \TYPO3\CMS\Core\Utility\GeneralUtility::_GPmerged('tx_solr');
 		$filterParameters = array();
 
 		if (isset($resultParameters['filter'])
@@ -157,7 +157,7 @@ class Tx_Solr_Facet_LinkBuilder extends Tx_Solr_Query_LinkBuilder {
 	 * @return array An array of filter parameters
 	 */
 	protected function removeFacetAndEncodeFilterParameters() {
-		$resultParameters = t3lib_div::_GPmerged('tx_solr');
+		$resultParameters = \TYPO3\CMS\Core\Utility\GeneralUtility::_GPmerged('tx_solr');
 		$filterParameters = array();
 		$indexToRemove    = FALSE;
 
@@ -213,7 +213,7 @@ class Tx_Solr_Facet_LinkBuilder extends Tx_Solr_Query_LinkBuilder {
 	 * @return array Array of filter parameters
 	 */
 	protected function replaceFacetAndEncodeFilterParameters() {
-		$resultParameters = t3lib_div::_GPmerged('tx_solr');
+		$resultParameters = \TYPO3\CMS\Core\Utility\GeneralUtility::_GPmerged('tx_solr');
 		$filterParameters = array();
 		$indexToReplace   = FALSE;
 

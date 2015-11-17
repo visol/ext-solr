@@ -104,7 +104,7 @@ class Tx_Solr_Scheduler_IndexQueueWorkerTaskAdditionalFieldProvider implements t
 	 * @param	tx_scheduler_Task	$task: reference to the current task object
 	 */
 	public function saveAdditionalFields(array $submittedData, tx_scheduler_Task $task) {
-		$task->setSite(t3lib_div::makeInstance('Tx_Solr_Site', $submittedData['site']));
+		$task->setSite(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Site', $submittedData['site']));
 		$task->setDocumentsToIndexLimit($submittedData['documentsToIndexLimit']);
 	}
 }

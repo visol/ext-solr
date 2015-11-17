@@ -66,7 +66,7 @@ class Tx_Solr_PiResults_FacetingCommand implements Tx_Solr_PluginCommand {
 	 * @param Tx_Solr_PluginBase_CommandPluginBase $parentPlugin Parent plugin object.
 	 */
 	public function __construct(Tx_Solr_PluginBase_CommandPluginBase $parentPlugin) {
-		$this->search = t3lib_div::makeInstance('Tx_Solr_Search');
+		$this->search = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Search');
 
 		$this->parentPlugin  = $parentPlugin;
 		$this->configuration = $parentPlugin->conf;
@@ -115,14 +115,14 @@ class Tx_Solr_PiResults_FacetingCommand implements Tx_Solr_PluginCommand {
 
 		$configuredFacets = $this->configuration['search.']['faceting.']['facets.'];
 
-		$facetRendererFactory = t3lib_div::makeInstance(
+		$facetRendererFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
 			'Tx_Solr_Facet_FacetRendererFactory',
 			$configuredFacets
 		); /** @var $facetRendererFactory Tx_Solr_Facet_FacetRendererFactory */
 
 		foreach ($configuredFacets as $facetName => $facetConfiguration) {
 			$facetName = substr($facetName, 0, -1);
-			$facet = t3lib_div::makeInstance('Tx_Solr_Facet_Facet',
+			$facet = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Facet_Facet',
 				$facetName,
 				$facetRendererFactory->getFacetInternalType($facetName)
 			); /** @var $facet Tx_Solr_Facet_Facet */
@@ -163,7 +163,7 @@ class Tx_Solr_PiResults_FacetingCommand implements Tx_Solr_PluginCommand {
 
 		$query = $this->search->getQuery();
 
-		$queryLinkBuilder = t3lib_div::makeInstance('Tx_Solr_Query_LinkBuilder', $this->search->getQuery());
+		$queryLinkBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Query_LinkBuilder', $this->search->getQuery());
 		/* @var $queryLinkBuilder Tx_Solr_Query_LinkBuilder */
 		$queryLinkBuilder->setLinkTargetPageId($this->parentPlugin->getLinkTargetPageId());
 
@@ -171,11 +171,11 @@ class Tx_Solr_PiResults_FacetingCommand implements Tx_Solr_PluginCommand {
 		if (!empty($this->configuration['search.']['faceting.']['facetLinkUrlParameters'])
 		&& isset($this->configuration['search.']['faceting.']['facetLinkUrlParameters.']['useForFacetResetLinkUrl'])
 		&& $this->configuration['search.']['faceting.']['facetLinkUrlParameters.']['useForFacetResetLinkUrl'] === '0') {
-			$addedUrlParameters = t3lib_div::explodeUrl2Array($this->configuration['search.']['faceting.']['facetLinkUrlParameters']);
+			$addedUrlParameters = \TYPO3\CMS\Core\Utility\GeneralUtility::explodeUrl2Array($this->configuration['search.']['faceting.']['facetLinkUrlParameters']);
 			$addedUrlParameterKeys = array_keys($addedUrlParameters);
 
 			foreach ($addedUrlParameterKeys as $addedUrlParameterKey) {
-				if (t3lib_div::isFirstPartOfStr($addedUrlParameterKey, 'tx_solr')) {
+				if (\TYPO3\CMS\Core\Utility\GeneralUtility::isFirstPartOfStr($addedUrlParameterKey, 'tx_solr')) {
 
 					$addedUrlParameterKey = substr($addedUrlParameterKey, 8, -1);
 					$queryLinkBuilder->addUnwantedUrlParameter($addedUrlParameterKey);
@@ -186,7 +186,7 @@ class Tx_Solr_PiResults_FacetingCommand implements Tx_Solr_PluginCommand {
 			}
 		}
 
-		$resultParameters = t3lib_div::_GET('tx_solr');
+		$resultParameters = \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('tx_solr');
 		$filterParameters = array();
 		if (isset($resultParameters['filter'])) {
 			$filterParameters = (array) array_map('urldecode', $resultParameters['filter']);
@@ -204,7 +204,7 @@ class Tx_Solr_PiResults_FacetingCommand implements Tx_Solr_PluginCommand {
 				continue;
 			}
 
-			$usedFacetRenderer = t3lib_div::makeInstance(
+			$usedFacetRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
 				'Tx_Solr_Facet_UsedFacetRenderer',
 				$filterName,
 				$filterValue,

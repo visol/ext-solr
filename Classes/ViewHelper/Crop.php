@@ -81,7 +81,7 @@ class Tx_Solr_ViewHelper_Crop implements Tx_Solr_ViewHelper {
 			$this->cropFullWords = TRUE;
 		}
 
-		$contentObject = t3lib_div::makeInstance('tslib_cObj');
+		$contentObject = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
 		$contentObject->start(array(), '');
 		$croppedString = $contentObject->cropHTML(
 			$stringToCrop,

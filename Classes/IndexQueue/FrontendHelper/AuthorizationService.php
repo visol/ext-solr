@@ -91,12 +91,12 @@ class Tx_Solr_IndexQueue_FrontendHelper_AuthorizationService extends tx_sv_authb
 	public function getGroups($user, $knownGroups)	{
 		$groupData = array();
 
-		$requestHandler = t3lib_div::makeInstance('Tx_Solr_IndexQueue_PageIndexerRequestHandler');
+		$requestHandler = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_IndexQueue_PageIndexerRequestHandler');
 		$accessRootline = $requestHandler->getRequest()->getParameter('accessRootline');
 
 		if ($user['username'] == self::SOLR_INDEXER_USERNAME && !empty($accessRootline)) {
 
-			$accessRootline = t3lib_div::makeInstance(
+			$accessRootline = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
 				'Tx_Solr_Access_Rootline',
 				$accessRootline
 			);

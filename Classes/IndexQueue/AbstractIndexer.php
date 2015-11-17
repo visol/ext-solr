@@ -89,13 +89,13 @@ abstract class Tx_Solr_IndexQueue_AbstractIndexer {
 	 */
 	protected function resolveFieldValue(array $indexingConfiguration, $solrFieldName, array $data) {
 		$fieldValue    = '';
-		$contentObject = t3lib_div::makeInstance('tslib_cObj');
+		$contentObject = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
 
 		if (isset($indexingConfiguration[$solrFieldName . '.'])) {
 				// configuration found => need to resolve a cObj
 
 				// setup locales
-			if ($GLOBALS['TSFE'] instanceof tslib_fe) {
+			if ($GLOBALS['TSFE'] instanceof \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController) {
 				$GLOBALS['TSFE']->settingLocale();
 			}
 
@@ -118,7 +118,7 @@ abstract class Tx_Solr_IndexQueue_AbstractIndexer {
 
 		} elseif (substr($indexingConfiguration[$solrFieldName], 0, 1) === '<') {
 			$referencedTsPath = trim(substr($indexingConfiguration[$solrFieldName], 1));
-			$typoScriptParser = t3lib_div::makeInstance('t3lib_TSparser');
+			$typoScriptParser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\TypoScript\\ExtendedTemplateService');
 			// $name and $conf is loaded with the referenced values.
 			list($name, $conf) = $typoScriptParser->getVal($referencedTsPath, $GLOBALS['TSFE']->tmpl->setup);
 
@@ -219,7 +219,7 @@ abstract class Tx_Solr_IndexQueue_AbstractIndexer {
 
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['detectSerializedValue'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['detectSerializedValue'] as $classReference) {
-				$serializedValueDetector = t3lib_div::getUserObj($classReference);
+				$serializedValueDetector = \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($classReference);
 
 				if ($serializedValueDetector instanceof Tx_Solr_SerializedValueDetector) {
 					$isSerialized = (boolean) $serializedValueDetector->isSerializedValue($indexingConfiguration, $solrFieldName);

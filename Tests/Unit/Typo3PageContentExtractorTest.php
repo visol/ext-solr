@@ -40,7 +40,7 @@ class Tx_Solr_Typo3PageContentExtractorTest extends Tx_Phpunit_TestCase {
 		$content = '<!-- TYPO3SEARCH_begin -->In Olten&nbsp;ist<!-- TYPO3SEARCH_end -->';
 		$expectedResult = 'In Olten ist';
 
-		$contentExtractor = t3lib_div::makeInstance(
+		$contentExtractor = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
 			'Tx_Solr_Typo3PageContentExtractor',
 			$content
 		);

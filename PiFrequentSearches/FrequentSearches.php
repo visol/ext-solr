@@ -46,7 +46,7 @@ class Tx_Solr_PiFrequentSearches_FrequentSearches extends Tx_Solr_PluginBase_Com
 	 * @return	Tx_Solr_CommandResolver	A command resolver
 	 */
 	protected function getCommandResolver(){
-		return t3lib_div::makeInstance('Tx_Solr_CommandResolver');
+		return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_CommandResolver');
 	}
 
 	/**
@@ -72,7 +72,7 @@ class Tx_Solr_PiFrequentSearches_FrequentSearches extends Tx_Solr_PluginBase_Com
 		$currentUrl = $this->pi_linkTP_keepPIvars_url();
 
 		if ($this->solrAvailable && $this->search->hasSearched()) {
-			$queryLinkBuilder = t3lib_div::makeInstance('Tx_Solr_Query_LinkBuilder', $this->search->getQuery());
+			$queryLinkBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Query_LinkBuilder', $this->search->getQuery());
 			$currentUrl = $queryLinkBuilder->getQueryUrl();
 		}
 
@@ -139,7 +139,7 @@ class Tx_Solr_PiFrequentSearches_FrequentSearches extends Tx_Solr_PluginBase_Com
 	 */
 	protected function preRender() {
 		if($this->conf['cssFiles.']['results']) {
-			$cssFile = t3lib_div::createVersionNumberedFilename($GLOBALS['TSFE']->tmpl->getFileName($this->conf['cssFiles.']['results']));
+			$cssFile = \TYPO3\CMS\Core\Utility\GeneralUtility::createVersionNumberedFilename($GLOBALS['TSFE']->tmpl->getFileName($this->conf['cssFiles.']['results']));
 			$GLOBALS['TSFE']->additionalHeaderData['tx_solr-resultsCss'] =
 					'<link href="' . $cssFile . '" rel="stylesheet" type="text/css" />';
 		}

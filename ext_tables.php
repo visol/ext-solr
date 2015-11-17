@@ -4,19 +4,19 @@ if (!defined ('TYPO3_MODE')) {
 }
 
 	// TODO change to a constant, so that it can't get manipulated
-$GLOBALS['PATH_solr']    = t3lib_extMgm::extPath('solr');
-$GLOBALS['PATHrel_solr'] = t3lib_extMgm::extRelPath('solr');
+$GLOBALS['PATH_solr']    = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('solr');
+$GLOBALS['PATHrel_solr'] = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('solr');
 
    # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- #
 
 if (version_compare(TYPO3_version, '6.1.0', '<')) {
-	t3lib_div::loadTCA('tt_content');
+	\TYPO3\CMS\Core\Utility\GeneralUtility::loadTCA('tt_content');
 }
 
    # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- #
 
 	// adding the search plugin
-t3lib_extMgm::addPlugin(
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
 	array(
 		'LLL:EXT:solr/locallang_db.xml:tt_content.list_type_pi_results',
 		$_EXTKEY . '_pi_results'
@@ -27,18 +27,18 @@ $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY . '_pi_resu
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY . '_pi_results'] = 'pi_flexform';
 
 	// add flexform to pi_results
-t3lib_extMgm::addPiFlexFormValue($_EXTKEY . '_pi_results', 'FILE:EXT:solr/Configuration/FlexForms/Results.xml');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($_EXTKEY . '_pi_results', 'FILE:EXT:solr/Configuration/FlexForms/Results.xml');
 
 	// add search plugin to content element wizard
 if (TYPO3_MODE == 'BE') {
 	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['Tx_Solr_Backend_ContentElementWizardIconProvider'] =
-		t3lib_extMgm::extPath($_EXTKEY) . 'Classes/Backend/ContentElementWizardIconProvider.php';
+		\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Classes/Backend/ContentElementWizardIconProvider.php';
 }
 
    # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- #
 
 	// adding the Search Form plugin
-t3lib_extMgm::addPlugin(
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
 	array(
 		'LLL:EXT:solr/locallang_db.xml:tt_content.list_type_pi_search',
 		$_EXTKEY . '_pi_search'
@@ -50,7 +50,7 @@ $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY . '_pi_sear
    # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- #
 
 	// adding the Frequent Searches plugin
-t3lib_extMgm::addPlugin(
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
 	array(
 		'LLL:EXT:solr/locallang_db.xml:tt_content.list_type_pi_frequentsearches',
 		$_EXTKEY . '_pi_frequentsearches'
@@ -62,20 +62,20 @@ $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY . '_pi_freq
    # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- #
 
 	// TypoScript
-t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/Solr/', 'Apache Solr - Default Configuration');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript/Solr/', 'Apache Solr - Default Configuration');
 
 	// OpenSearch
-t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/OpenSearch/', 'Apache Solr - OpenSearch');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript/OpenSearch/', 'Apache Solr - OpenSearch');
 
 	// Extension Pre-Configuration
-t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/Examples/IndexQueueNews/', 'Apache Solr - Index Queue Configuration for news');
-t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/Examples/IndexQueueTtNews/', 'Apache Solr - Index Queue Configuration for tt_news');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript/Examples/IndexQueueNews/', 'Apache Solr - Index Queue Configuration for news');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript/Examples/IndexQueueTtNews/', 'Apache Solr - Index Queue Configuration for tt_news');
 
 	// Examples
-t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/Examples/BoostQueries/', 'Apache Solr Example - Boost more recent results');
-t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/Examples/EverythingOn/', 'Apache Solr Example - Everything On');
-t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/Examples/FilterPages/', 'Apache Solr Example - Filter to only show page results');
-t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/Examples/IntroPackageSearchBox/', 'Apache Solr Example - Replace Introduction Package search box');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript/Examples/BoostQueries/', 'Apache Solr Example - Boost more recent results');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript/Examples/EverythingOn/', 'Apache Solr Example - Everything On');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript/Examples/FilterPages/', 'Apache Solr Example - Filter to only show page results');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript/Examples/IntroPackageSearchBox/', 'Apache Solr Example - Replace Introduction Package search box');
 
    # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- #
 
@@ -139,8 +139,8 @@ if (TYPO3_MODE == 'BE') {
 			array('index,addSynonyms,deleteSynonyms')
 		);
 	} else {
-		t3lib_extMgm::addModulePath('tools_txsolrMAdmin', t3lib_extMgm::extPath($_EXTKEY) . 'ModAdmin/');
-		t3lib_extMgm::addModule('tools', 'txsolrMAdmin', '', t3lib_extMgm::extPath($_EXTKEY) . 'ModAdmin/');
+		\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addModulePath('tools_txsolrMAdmin', \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'ModAdmin/');
+		\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addModule('tools', 'txsolrMAdmin', '', \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'ModAdmin/');
 	}
 
 	// registering reports
@@ -155,18 +155,8 @@ if (TYPO3_MODE == 'BE') {
 		'Tx_Solr_Report_FilterVarStatus'
 	);
 
-	if (t3lib_utility_VersionNumber::convertVersionNumberToInteger(TYPO3_version) < 6000000) {
-		// registering the index report with the reports module
-		$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['reports']['tx_solr']['index'] = array(
-			'title' => 'LLL:EXT:solr/Resources/Private/Language/ModuleReports.xml:index_title',
-			'description' => 'LLL:EXT:solr/Resources/Private/Language/ModuleReports.xml:index_description',
-			'report' => 'Tx_Solr_Report_IndexReport',
-			'icon' => 'EXT:solr/Report/tx_solr_report.gif'
-		);
-	}
-
 	// Index Inspector
-	t3lib_extMgm::insertModuleFunction(
+	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::insertModuleFunction(
 		'web_info',
 		'Tx_Solr_ModIndex_IndexInspector',
 		$GLOBALS['PATH_solr'] . 'ModIndex/IndexInspector.php',
@@ -197,13 +187,13 @@ if (TYPO3_MODE == 'BE') {
 
 	// register click menu item to initialize the Solr connections for a single site
 	// visible for admin users only
-t3lib_extMgm::addUserTSConfig('
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig('
 [adminUser = 1]
 options.contextMenu.table.pages.items.850 = ITEM
 options.contextMenu.table.pages.items.850 {
 	name = Tx_Solr_initializeSolrConnections
 	label = Initialize Solr Connections
-	icon = ' . t3lib_div::locationHeaderUrl($GLOBALS['PATHrel_solr'] . 'Resources/Images/cache-init-solr-connections.png') . '
+	icon = ' . \TYPO3\CMS\Core\Utility\GeneralUtility::locationHeaderUrl($GLOBALS['PATHrel_solr'] . 'Resources/Images/cache-init-solr-connections.png') . '
 	displayCondition = getRecord|is_siteroot = 1
 	callbackAction = initializeSolrConnections
 }
@@ -212,7 +202,7 @@ options.contextMenu.table.pages.items.851 = DIVIDER
 [global]
 ');
 
-t3lib_extMgm::registerExtDirectComponent(
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerExtDirectComponent(
 	'TYPO3.Solr.ContextMenuActionController',
 	$GLOBALS['PATHrel_solr'] . 'Classes/ContextMenuActionController.php:Tx_Solr_ContextMenuActionController',
 	'web',
@@ -226,7 +216,7 @@ $GLOBALS['TYPO3_CONF_VARS']['typo3/backend.php']['additionalBackendItems']['Solr
 # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- #
 
 	// replace the built-in search content element
-t3lib_extMgm::addPiFlexFormValue(
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
 	'*',
 	'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/Results.xml',
 	'search'

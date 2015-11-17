@@ -59,7 +59,7 @@ class Tx_Solr_FieldProcessor_PathToHierarchy implements Tx_Solr_FieldProcessor {
 	protected function buildSolrHierarchyFromPath($path) {
 		$hierarchy = array();
 
-		$treeParts = t3lib_div::trimExplode('/', $path, TRUE);
+		$treeParts = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode('/', $path, TRUE);
 		$currentTreeParts = array();
 
 		foreach ($treeParts as $i => $part) {

@@ -59,7 +59,7 @@ class Tx_Solr_PiResults_SortingCommand implements Tx_Solr_PluginCommand {
 	 * @param Tx_Solr_PluginBase_CommandPluginBase $parentPlugin Parent plugin object.
 	 */
 	public function __construct(Tx_Solr_PluginBase_CommandPluginBase $parentPlugin) {
-		$this->search = t3lib_div::makeInstance('Tx_Solr_Search');
+		$this->search = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Search');
 
 		$this->parentPlugin  = $parentPlugin;
 		$this->configuration = $parentPlugin->conf;
@@ -83,17 +83,17 @@ class Tx_Solr_PiResults_SortingCommand implements Tx_Solr_PluginCommand {
 	}
 
 	protected function getSortingLinks() {
-		$sortHelper = t3lib_div::makeInstance('Tx_Solr_Sorting', $this->configuration['search.']['sorting.']['options.']);
+		$sortHelper = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Sorting', $this->configuration['search.']['sorting.']['options.']);
 
 		$query = $this->search->getQuery();
 
-		$queryLinkBuilder = t3lib_div::makeInstance('Tx_Solr_Query_LinkBuilder', $query);
+		$queryLinkBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Query_LinkBuilder', $query);
 		$queryLinkBuilder->setLinkTargetPageId($this->parentPlugin->getLinkTargetPageId());
 
 		$sortOptions = array();
 
-		$urlParameters     = t3lib_div::_GP('tx_solr');
-		$urlSortParameters = t3lib_div::trimExplode(',', $urlParameters['sort']);
+		$urlParameters     = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('tx_solr');
+		$urlSortParameters = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $urlParameters['sort']);
 
 		$configuredSortOptions = $sortHelper->getSortOptions();
 

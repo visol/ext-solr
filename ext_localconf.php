@@ -3,12 +3,12 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
-$GLOBALS['PATH_solr'] = t3lib_extMgm::extPath('solr');
+$GLOBALS['PATH_solr'] = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('solr');
 
 # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- #
 
 $compatMode = FALSE;
-if (!t3lib_div::compat_version('6.0')) {
+if (!\TYPO3\CMS\Core\Utility\GeneralUtility::compat_version('6.0')) {
 	$compatMode = TRUE;
 	require_once($GLOBALS['PATH_solr'] . 'Compat/interface.tx_scheduler_progressprovider.php');
 }
@@ -26,7 +26,7 @@ if(!function_exists('strptime')) {
    # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- #
 
 	// adding the Search plugin
-t3lib_extMgm::addPItoST43(
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPItoST43(
 	$_EXTKEY,
 	'PiResults/Results.php',
 	'_pi_results',
@@ -35,7 +35,7 @@ t3lib_extMgm::addPItoST43(
 );
 
 	// adding the Search Form plugin
-t3lib_extMgm::addPItoST43(
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPItoST43(
 	$_EXTKEY,
 	'PiSearch/Search.php',
 	'_pi_search',
@@ -44,7 +44,7 @@ t3lib_extMgm::addPItoST43(
 );
 
 	// adding the Frequent Searches plugin
-t3lib_extMgm::addPItoST43(
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPItoST43(
 	$_EXTKEY,
 	'PiFrequentSearches/FrequentSearches.php',
 	'_pi_frequentsearches',
@@ -73,7 +73,7 @@ if (TYPO3_MODE == 'FE' && isset($_SERVER['HTTP_X_TX_SOLR_IQ'])) {
 
    # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- #
 
-t3lib_extMgm::registerExtDirectComponent(
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerExtDirectComponent(
 	'TYPO3.tx_solr.IndexInspector.Remote',
 	$GLOBALS['PATH_solr'] . 'ModIndex/IndexInspectorRemoteController.php:Tx_Solr_ModIndex_IndexInspectorRemoteController',
 	'web_info',
@@ -302,7 +302,7 @@ tt_content.search {
 }
 ');
 
-t3lib_extMgm::addTypoScript(
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
 	$_EXTKEY,
 	'setup',
 	'# Setting ' . $_EXTKEY . ' plugin TypoScript' . $searchReplacementTypoScript,
@@ -340,12 +340,12 @@ if (version_compare(TYPO3_version, '4.6', '<')) {
 
 		// use variable frontend as caching frontend
 	if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tx_solr']['frontend'])) {
-		$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tx_solr']['frontend'] = 't3lib_cache_frontend_VariableFrontend';
+		$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tx_solr']['frontend'] = 'TYPO3\\CMS\\Core\\Cache\\Frontend\\VariableFrontend';
 	}
 
 		// use database backend as caching backend
 	if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tx_solr']['backend'])) {
-		$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tx_solr']['backend'] = 't3lib_cache_backend_DbBackend';
+		$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tx_solr']['backend'] = 'TYPO3\\CMS\\Core\\Cache\\Backend\\Typo3DatabaseBackend';
 	}
 
 		// data and tags table

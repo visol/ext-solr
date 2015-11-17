@@ -55,12 +55,12 @@ class Tx_Solr_Facet_NumericRangeFacetRenderer extends Tx_Solr_Facet_AbstractFace
 		$handlePositions = $this->getHandlePositions();
 
 			// the option's value will be appended by javascript after the slide event
-		$incompleteFacetOption = t3lib_div::makeInstance('Tx_Solr_Facet_FacetOption',
+		$incompleteFacetOption = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Facet_FacetOption',
 			$this->facetName,
 			''
 		);
 
-		$facetLinkBuilder = t3lib_div::makeInstance('Tx_Solr_Facet_LinkBuilder',
+		$facetLinkBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Facet_LinkBuilder',
 			$this->search->getQuery(),
 			$this->facetName,
 			$incompleteFacetOption
@@ -138,7 +138,7 @@ class Tx_Solr_Facet_NumericRangeFacetRenderer extends Tx_Solr_Facet_AbstractFace
 	 *
 	 */
 	protected function loadJavaScriptFiles() {
-		$javascriptManager = t3lib_div::makeInstance('Tx_Solr_JavascriptManager');
+		$javascriptManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_JavascriptManager');
 
 		$javascriptManager->loadFile('library');
 		$javascriptManager->loadFile('ui');
@@ -159,7 +159,7 @@ class Tx_Solr_Facet_NumericRangeFacetRenderer extends Tx_Solr_Facet_AbstractFace
 	 */
 	protected function loadStylesheets() {
 		if ($this->configuration['cssFiles.']['ui'] && !$GLOBALS['TSFE']->additionalHeaderData['tx_solr-uiCss']) {
-			$cssFile = t3lib_div::createVersionNumberedFilename($GLOBALS['TSFE']->tmpl->getFileName($this->configuration['cssFiles.']['ui']));
+			$cssFile = \TYPO3\CMS\Core\Utility\GeneralUtility::createVersionNumberedFilename($GLOBALS['TSFE']->tmpl->getFileName($this->configuration['cssFiles.']['ui']));
 			$GLOBALS['TSFE']->additionalHeaderData['tx_solr-uiCss'] =
 				'<link href="' . $cssFile . '" rel="stylesheet" type="text/css" media="all" />';
 		}

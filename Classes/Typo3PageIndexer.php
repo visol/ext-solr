@@ -44,7 +44,7 @@ class Tx_Solr_Typo3PageIndexer {
 	/**
 	 * Frontend page object (TSFE).
 	 *
-	 * @var	tslib_fe
+	 * @var
 	 */
 	protected $page = NULL;
 
@@ -94,11 +94,11 @@ class Tx_Solr_Typo3PageIndexer {
 	/**
 	 * Constructor for class Tx_Solr_Indexer
 	 *
-	 * @param	tslib_fe	$page The page to index
+	 * @param	\TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController	$page The page to index
 	 */
-	public function __construct(tslib_fe $page) {
+	public function __construct(\TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $page) {
 		$this->page        = $page;
-		$this->pageUrl     = t3lib_div::getIndpEnv('TYPO3_REQUEST_URL');
+		$this->pageUrl     = \TYPO3\CMS\Core\Utility\GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL');
 
 		try {
 			$this->initializeSolrConnection();
@@ -107,19 +107,19 @@ class Tx_Solr_Typo3PageIndexer {
 
 				// TODO extract to a class "ExceptionLogger"
 			if ($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_solr.']['logging.']['exceptions']) {
-				t3lib_div::devLog('Exception while trying to index a page', 'solr', 3, array(
+				\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('Exception while trying to index a page', 'solr', 3, array(
 					$e->__toString()
 				));
 			}
 		}
 
-		$this->contentExtractor = t3lib_div::makeInstance(
+		$this->contentExtractor = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
 			'Tx_Solr_Typo3PageContentExtractor',
 			$this->page->content,
 			$this->page->renderCharset
 		);
 
-		$this->pageAccessRootline = t3lib_div::makeInstance(
+		$this->pageAccessRootline = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
 			'Tx_Solr_Access_Rootline',
 			''
 		);
@@ -131,7 +131,7 @@ class Tx_Solr_Typo3PageIndexer {
 	 * @throws	Exception when no Solr connection can be established.
 	 */
 	protected function initializeSolrConnection() {
-		$solr = t3lib_div::makeInstance('Tx_Solr_ConnectionManager')->getConnectionByPageId(
+		$solr = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_ConnectionManager')->getConnectionByPageId(
 			$this->page->id,
 			$this->page->sys_language_uid
 		);
@@ -188,7 +188,7 @@ class Tx_Solr_Typo3PageIndexer {
 
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['Indexer']['indexPagePostProcessPageDocument'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['Indexer']['indexPagePostProcessPageDocument'] as $classReference) {
-				$postProcessor = t3lib_div::getUserObj($classReference);
+				$postProcessor = \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($classReference);
 				if ($postProcessor instanceof Tx_Solr_PageDocumentPostProcessor) {
 					$postProcessor->postProcessPageDocument($pageDocument, $this->page);
 				} else {
@@ -217,7 +217,7 @@ class Tx_Solr_Typo3PageIndexer {
 	 * @return	Apache_Solr_Document	A documment representing the page
 	 */
 	protected function getPageDocument() {
-		$document   = t3lib_div::makeInstance('Apache_Solr_Document');
+		$document   = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Apache_Solr_Document');
 		/* @var	$document	Apache_Solr_Document */
 		$site       = Tx_Solr_Site::getSiteByPageId($this->page->id);
 		$pageRecord = $this->page->page;
@@ -259,7 +259,7 @@ class Tx_Solr_Typo3PageIndexer {
 		$document->setField('url',         $this->pageUrl);
 
 			// keywords, multi valued
-		$keywords = array_unique(t3lib_div::trimExplode(
+		$keywords = array_unique(\TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(
 			',',
 			$pageRecord['keywords'],
 			TRUE
@@ -309,7 +309,7 @@ class Tx_Solr_Typo3PageIndexer {
 			$this->log($e->getMessage() . ' Error code: ' . $e->getCode(), 2);
 
 			if ($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_solr.']['logging.']['exceptions']) {
-				t3lib_div::devLog('Exception while adding documents', 'solr', 3, array(
+				\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('Exception while adding documents', 'solr', 3, array(
 					$e->__toString()
 				));
 			}
@@ -328,7 +328,7 @@ class Tx_Solr_Typo3PageIndexer {
 	protected function substitutePageDocument(Apache_Solr_Document $pageDocument) {
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['Indexer']['indexPageSubstitutePageDocument'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['Indexer']['indexPageSubstitutePageDocument'] as $classReference) {
-				$substituteIndexer = t3lib_div::getUserObj($classReference);
+				$substituteIndexer = \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($classReference);
 
 				if ($substituteIndexer instanceof Tx_Solr_SubstitutePageIndexer) {
 					$substituteDocument = $substituteIndexer->getPageDocument($pageDocument);
@@ -366,7 +366,7 @@ class Tx_Solr_Typo3PageIndexer {
 
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['Indexer']['indexPageAddDocuments'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['Indexer']['indexPageAddDocuments'] as $classReference) {
-				$additionalIndexer = t3lib_div::getUserObj($classReference);
+				$additionalIndexer = \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($classReference);
 
 				if ($additionalIndexer instanceof Tx_Solr_AdditionalPageIndexer) {
 					$additionalDocuments = $additionalIndexer->getAdditionalPageDocuments($pageDocument, $documents);
@@ -394,7 +394,7 @@ class Tx_Solr_Typo3PageIndexer {
 	 */
 	protected function processDocuments(array $documents) {
 		if (is_array($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_solr.']['index.']['fieldProcessingInstructions.'])) {
-			$service = t3lib_div::makeInstance('Tx_Solr_FieldProcessor_Service');
+			$service = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_FieldProcessor_Service');
 			$service->processDocuments(
 				$documents,
 				$GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_solr.']['index.']['fieldProcessingInstructions.']
@@ -427,7 +427,7 @@ class Tx_Solr_Typo3PageIndexer {
 				}
 			}
 
-			t3lib_div::devLog($message, 'solr', $errorNum, $logData);
+			\TYPO3\CMS\Core\Utility\GeneralUtility::devLog($message, 'solr', $errorNum, $logData);
 		}
 	}
 

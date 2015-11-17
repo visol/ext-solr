@@ -53,7 +53,7 @@ class Tx_Solr_ViewHelper_SortIndicator implements Tx_Solr_ViewHelper {
 		$content            = '';
 		$sortDirection      = trim($arguments[0]);
 		$configuration      = Tx_Solr_Util::getSolrConfiguration();
-		$contentObject      = t3lib_div::makeInstance('tslib_cObj');
+		$contentObject      = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
 		$defaultImagePrefix = 'EXT:solr/Resources/Images/Indicator';
 
 		switch ($sortDirection) {

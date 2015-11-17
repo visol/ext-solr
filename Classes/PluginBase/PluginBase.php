@@ -35,7 +35,7 @@
  * @package TYPO3
  * @subpackage solr
  */
-abstract class Tx_Solr_PluginBase_PluginBase extends tslib_pibase {
+abstract class Tx_Solr_PluginBase_PluginBase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 	public $prefixId = 'tx_solr';
 	public $extKey   = 'solr';
@@ -112,7 +112,7 @@ abstract class Tx_Solr_PluginBase_PluginBase extends tslib_pibase {
 			$content = $this->postRender($content);
 		} catch(Exception $e) {
 			if ($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_solr.']['logging.']['exceptions']) {
-				t3lib_div::devLog(
+				\TYPO3\CMS\Core\Utility\GeneralUtility::devLog(
 					$e->getCode() . ': ' . $e->__toString(),
 					'solr',
 					3,
@@ -162,7 +162,7 @@ abstract class Tx_Solr_PluginBase_PluginBase extends tslib_pibase {
 	protected function initialize($configuration) {
 		$this->conf = $configuration;
 
-		$this->conf = t3lib_div::array_merge_recursive_overrule(
+		$this->conf = \TYPO3\CMS\Core\Utility\GeneralUtility::array_merge_recursive_overrule(
 			$GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_solr.'],
 			$this->conf
 		);
@@ -193,7 +193,7 @@ abstract class Tx_Solr_PluginBase_PluginBase extends tslib_pibase {
 				$this->conf['_DEFAULT_PI_VARS.'][$key] = $this->cObj->cObjGetSingle($this->conf['_DEFAULT_PI_VARS.'][$key], $this->conf['_DEFAULT_PI_VARS.'][$key . '.']);
 			}
 
-			$this->piVars = t3lib_div::array_merge_recursive_overrule(
+			$this->piVars = \TYPO3\CMS\Core\Utility\GeneralUtility::array_merge_recursive_overrule(
 				$this->conf['_DEFAULT_PI_VARS.'],
 				is_array($this->piVars) ? $this->piVars : array()
 			);
@@ -219,10 +219,10 @@ abstract class Tx_Solr_PluginBase_PluginBase extends tslib_pibase {
 			$basePath = 'EXT:' . $this->extKey . '/Resources/Private/Language/' . $languageFileName . '.xml';
 
 			// Read the strings in the required charset (since TYPO3 4.2)
-			$this->LOCAL_LANG = t3lib_div::readLLfile($basePath, $this->LLkey, $GLOBALS['TSFE']->renderCharset);
-			$alternativeLanguageKeys = t3lib_div::trimExplode(',', $this->altLLkey, TRUE);
+			$this->LOCAL_LANG = \TYPO3\CMS\Core\Utility\GeneralUtility::readLLfile($basePath, $this->LLkey, $GLOBALS['TSFE']->renderCharset);
+			$alternativeLanguageKeys = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->altLLkey, TRUE);
 			foreach ($alternativeLanguageKeys as $languageKey) {
-				$tempLL = t3lib_div::readLLfile($basePath, $languageKey);
+				$tempLL = \TYPO3\CMS\Core\Utility\GeneralUtility::readLLfile($basePath, $languageKey);
 				if ($this->LLkey !== 'default' && isset($tempLL[$languageKey])) {
 					$this->LOCAL_LANG[$languageKey] = $tempLL[$languageKey];
 				}
@@ -238,7 +238,7 @@ abstract class Tx_Solr_PluginBase_PluginBase extends tslib_pibase {
 					if (is_array($languageArray) && isset($this->LOCAL_LANG[$languageKey])) {
 						foreach ($languageArray as $labelKey => $labelValue) {
 							if (!is_array($labelValue)) {
-								if (t3lib_div::compat_version('4.7')) {
+								if (\TYPO3\CMS\Core\Utility\GeneralUtility::compat_version('4.7')) {
 									$this->LOCAL_LANG[$languageKey][$labelKey][0]['target'] = $labelValue;
 									$this->LOCAL_LANG_charset[$languageKey][$labelKey] = 'utf-8';
 								} else {
@@ -272,7 +272,7 @@ abstract class Tx_Solr_PluginBase_PluginBase extends tslib_pibase {
 	 *
 	 */
 	protected function initializeQuery() {
-		$this->rawUserQuery = t3lib_div::_GET('q');
+		$this->rawUserQuery = \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('q');
 	}
 
 	/**
@@ -280,13 +280,13 @@ abstract class Tx_Solr_PluginBase_PluginBase extends tslib_pibase {
 	 *
 	 */
 	protected function initializeSearch() {
-		$solrConnection = t3lib_div::makeInstance('Tx_Solr_ConnectionManager')->getConnectionByPageId(
+		$solrConnection = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_ConnectionManager')->getConnectionByPageId(
 			$GLOBALS['TSFE']->id,
 			$GLOBALS['TSFE']->sys_language_uid,
 			$GLOBALS['TSFE']->MP
 		);
 
-		$this->search = t3lib_div::makeInstance('Tx_Solr_Search', $solrConnection);
+		$this->search = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Search', $solrConnection);
 		$this->solrAvailable = $this->search->ping();
 	}
 
@@ -310,7 +310,7 @@ abstract class Tx_Solr_PluginBase_PluginBase extends tslib_pibase {
 		}
 
 		/** @var Tx_Solr_Template $template */
-		$template = t3lib_div::makeInstance(
+		$template = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
 			'Tx_Solr_Template',
 			$this->cObj,
 			$templateFile,
@@ -325,7 +325,7 @@ abstract class Tx_Solr_PluginBase_PluginBase extends tslib_pibase {
 			// can be used for view helpers that need configuration during initialization
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr'][$this->getPluginKey()]['addViewHelpers'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr'][$this->getPluginKey()]['addViewHelpers'] as $classReference) {
-				$viewHelperProvider = &t3lib_div::getUserObj($classReference);
+				$viewHelperProvider = &\TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($classReference);
 
 				if ($viewHelperProvider instanceof Tx_Solr_ViewHelperProvider) {
 					$viewHelpers = $viewHelperProvider->getViewHelpers();
@@ -352,7 +352,7 @@ abstract class Tx_Solr_PluginBase_PluginBase extends tslib_pibase {
 	 *
 	 */
 	protected function initializeJavascriptManager() {
-		$this->javascriptManager = t3lib_div::makeInstance('Tx_Solr_JavascriptManager');
+		$this->javascriptManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_JavascriptManager');
 	}
 
 	/**

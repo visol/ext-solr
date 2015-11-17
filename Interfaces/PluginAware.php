@@ -39,9 +39,9 @@ interface Tx_Solr_PluginAware {
 	 * Provides the extension component with an instance of the currently active
 	 * plugin.
 	 *
-	 * @param	tslib_pibase	Currently active plugin
+	 * @param	\TYPO3\CMS\Frontend\Plugin\AbstractPlugin	Currently active plugin
 	 */
-	public function setParentPlugin(tslib_pibase $parentPlugin);
+	public function setParentPlugin(\TYPO3\CMS\Frontend\Plugin\AbstractPlugin $parentPlugin);
 }
 
 ?>

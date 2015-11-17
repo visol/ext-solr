@@ -94,7 +94,7 @@ class Tx_Solr_Facet_HierarchicalFacetHelper {
 
 		foreach ($facetOptions as $facetOptionKey => $facetOption) {
 				// find the sub menu items for the current menu
-			if (t3lib_div::isFirstPartOfStr($facetOptionKey, $subMenuEntryPrefix)) {
+			if (\TYPO3\CMS\Core\Utility\GeneralUtility::isFirstPartOfStr($facetOptionKey, $subMenuEntryPrefix)) {
 				$currentMenu = array(
 					'title'           => $this->getFacetOptionLabel($facetOptionKey, $facetOption['numberOfResults']),
 					'facetKey'        => Tx_Solr_Facet_HierarchicalFacetRenderer::getLastPathSegmentFromHierarchicalFacetOption($facetOptionKey),

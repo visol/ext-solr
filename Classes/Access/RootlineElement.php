@@ -127,7 +127,7 @@ class Tx_Solr_Access_RootlineElement {
 			$elementGroups = $elementAccess[1];
 		}
 
-		$this->accessGroups = t3lib_div::intExplode(',', $elementGroups);
+		$this->accessGroups = \TYPO3\CMS\Core\Utility\GeneralUtility::intExplode(',', $elementGroups);
 	}
 
 	/**

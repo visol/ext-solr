@@ -73,7 +73,7 @@ class Tx_Solr_Report_SolrConfigurationStatus implements tx_reports_StatusProvide
 		$rootPages = $this->getRootPages();
 
 		if (empty($rootPages)) {
-			$status = t3lib_div::makeInstance('tx_reports_reports_status_Status',
+			$status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_reports_reports_status_Status',
 				'Sites',
 				'No sites found',
 				'Connections to your Solr server are detected automatically.
@@ -122,7 +122,7 @@ class Tx_Solr_Report_SolrConfigurationStatus implements tx_reports_StatusProvide
 				$rootPagesWithoutDomain[$pageId] = '[' . $page['uid'] . '] ' . $page['title'];
 			}
 
-			$status = t3lib_div::makeInstance('tx_reports_reports_status_Status',
+			$status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_reports_reports_status_Status',
 				'Domain Records',
 				'Domain records missing',
 				'Domain records are needed to properly index pages. The following
@@ -155,7 +155,7 @@ class Tx_Solr_Report_SolrConfigurationStatus implements tx_reports_StatusProvide
 				}
 			} catch (RuntimeException $rte) {
 				$rootPagesWithIndexingOff[] = $rootPage;
-			} catch (t3lib_error_http_ServiceUnavailableException $sue) {
+			} catch (\TYPO3\CMS\Core\Error\Http\ServiceUnavailableException $sue) {
 				if ($sue->getCode() == 1294587218) {
 						//  No TypoScript template found, continue with next site
 					$rootPagesWithIndexingOff[] = $rootPage;
@@ -169,7 +169,7 @@ class Tx_Solr_Report_SolrConfigurationStatus implements tx_reports_StatusProvide
 				$rootPagesWithIndexingOff[$key] = '[' . $rootPageWithIndexingOff['uid'] . '] ' . $rootPageWithIndexingOff['title'];
 			}
 
-			$status = t3lib_div::makeInstance('tx_reports_reports_status_Status',
+			$status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_reports_reports_status_Status',
 				'Page Indexing',
 				'Indexing is disabled',
 				'You need to set config.index_enable = 1 to allow page indexing.

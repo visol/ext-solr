@@ -112,7 +112,7 @@ class Tx_Solr_PiResults_ParameterKeepingFormModifier implements Tx_Solr_FormModi
 		$value = urldecode($value);
 
 		$value = filter_var(strip_tags($value), FILTER_SANITIZE_STRING);
-		$value = t3lib_div::removeXSS($value);
+		$value = \TYPO3\CMS\Core\Utility\GeneralUtility::removeXSS($value);
 
 		return urlencode($value);
 	}

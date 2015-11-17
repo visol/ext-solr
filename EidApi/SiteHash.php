@@ -32,14 +32,14 @@
 */
 
 
-$domain     = t3lib_div::_GP('domain');
+$domain     = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('domain');
 $returnData = '';
 
 if (!empty($domain)) {
 	$siteHash   = Tx_Solr_Util::getSiteHashForDomain($domain);
 	$returnData = json_encode(array('sitehash' => $siteHash));
 } else {
-	header(t3lib_utility_Http::HTTP_STATUS_400);
+	header(\TYPO3\CMS\Core\Utility\HttpUtility::HTTP_STATUS_400);
 
 	$errorMessage = 'You have to provide an existing domain, e.g. www.example.com.';
 

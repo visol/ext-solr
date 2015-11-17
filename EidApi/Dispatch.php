@@ -23,12 +23,12 @@
 ***************************************************************/
 
 
-$api = t3lib_div::_GP('api');
-$apiKey = trim(t3lib_div::_GP('apiKey'));
+$api = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('api');
+$apiKey = trim(\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('apiKey'));
 
 if (!Tx_Solr_Api::isValidApiKey($apiKey)) {
 
-	header(t3lib_utility_Http::HTTP_STATUS_403);
+	header(\TYPO3\CMS\Core\Utility\HttpUtility::HTTP_STATUS_403);
 	header('Content-Type: application/json; charset=utf-8');
 	echo json_encode(array('errorMessage' => 'Invalid API key'));
 
@@ -41,7 +41,7 @@ if (!Tx_Solr_Api::isValidApiKey($apiKey)) {
 			break;
 
 		default:
-			header(t3lib_utility_Http::HTTP_STATUS_400);
+			header(\TYPO3\CMS\Core\Utility\HttpUtility::HTTP_STATUS_400);
 			header('Content-Type: application/json; charset=utf-8');
 			echo json_encode(array('errorMessage' => 'You must provide an available API method, e.g. siteHash.'));
 			break;

@@ -41,9 +41,9 @@ interface Tx_Solr_PageDocumentPostProcessor {
 	 * Can be used to trigger actions when all contextual variables of the pageDocument to be indexed are known
 	 *
 	 * @param Apache_Solr_Document $pageDocument the generated page document
-	 * @param tslib_fe $page the page object with information about page id or language
+	 * @param \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $page the page object with information about page id or language
 	 * @return void
 	 */
-	public function postProcessPageDocument(Apache_Solr_Document $pageDocument, tslib_fe $page);
+	public function postProcessPageDocument(Apache_Solr_Document $pageDocument, \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $page);
 
 }

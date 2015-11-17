@@ -37,10 +37,10 @@ class Tx_Solr_IndexQueue_FrontendHelper_UserGroupDetector
 		Tx_Solr_IndexQueue_FrontendHelper_Abstract
 
 	implements
-		t3lib_Singleton,
-		tslib_content_PostInitHook,
-		t3lib_pageSelect_getPageHook,
-		t3lib_pageSelect_getPageOverlayHook {
+		\TYPO3\CMS\Core\SingletonInterface,
+        \TYPO3\CMS\Frontend\ContentObject\ContentObjectPostInitHookInterface,
+        \TYPO3\CMS\Frontend\Page\PageRepositoryGetPageHookInterface,
+        \TYPO3\CMS\Frontend\Page\PageRepositoryGetPageOverlayHookInterface {
 
 
 
@@ -119,9 +119,9 @@ class Tx_Solr_IndexQueue_FrontendHelper_UserGroupDetector
 	 *
 	 * @param	integer	The page ID
 	 * @param	boolean	If set, the check for group access is disabled. VERY rarely used
-	 * @param	t3lib_pageSelect	parent t3lib_pageSelect object
+	 * @param	\TYPO3\CMS\Frontend\Page\PageRepository	parent t3lib_pageSelect object
 	 */
-	public function getPage_preProcess(&$uid, &$disableGroupAccessCheck, t3lib_pageSelect $parentObject) {
+	public function getPage_preProcess(&$uid, &$disableGroupAccessCheck, \TYPO3\CMS\Frontend\Page\PageRepository $parentObject) {
 		$disableGroupAccessCheck = TRUE;
 		$parentObject->where_groupAccess = ''; // just to be on the safe side
 	}
@@ -132,9 +132,9 @@ class Tx_Solr_IndexQueue_FrontendHelper_UserGroupDetector
 	 *
 	 * @param	array	Page record
 	 * @param	integer	Overlay language ID
-	 * @param	t3lib_pageSelect	Parent t3lib_pageSelect object
+	 * @param	\TYPO3\CMS\Frontend\Page\PageRepository	Parent t3lib_pageSelect object
 	 */
-	public function getPageOverlay_preProcess(&$pageRecord, &$languageUid, t3lib_pageSelect $parentObject) {
+	public function getPageOverlay_preProcess(&$pageRecord, &$languageUid, \TYPO3\CMS\Frontend\Page\PageRepository $parentObject) {
 		if (is_array($pageRecord)) {
 			$pageRecord['fe_group'] = '';
 			$pageRecord['extendToSubpages'] = '0';
@@ -146,9 +146,9 @@ class Tx_Solr_IndexQueue_FrontendHelper_UserGroupDetector
 	/**
 	 * Hook for post processing the initialization of tslib_cObj
 	 *
-	 * @param	tslib_cObj	parent content object
+	 * @param	\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer	parent content object
 	 */
-	public function postProcessContentObjectInitialization(tslib_cObj &$parentObject) {
+	public function postProcessContentObjectInitialization(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer &$parentObject) {
 		if (!empty($parentObject->currentRecord)) {
 			list($table) = explode(':', $parentObject->currentRecord);
 
@@ -173,7 +173,7 @@ class Tx_Solr_IndexQueue_FrontendHelper_UserGroupDetector
 				$frontendGroups = 0;
 			} else {
 				if ($this->request->getParameter('loggingEnabled')) {
-					t3lib_div::devLog('Access restriction found', 'solr', 0, array(
+					\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('Access restriction found', 'solr', 0, array(
 						'groups'      => $frontendGroups,
 						'record'      => $record,
 						'record type' => $table,
@@ -193,7 +193,7 @@ class Tx_Solr_IndexQueue_FrontendHelper_UserGroupDetector
 	 */
 	protected function getFrontendGroups() {
 		$frontendGroupsList = implode(',', $this->frontendGroups);
-		$frontendGroups     = t3lib_div::trimExplode(',', $frontendGroupsList, TRUE);
+		$frontendGroups     = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $frontendGroupsList, TRUE);
 
 			// clean up: filter double groups
 		$frontendGroups = array_unique($frontendGroups);

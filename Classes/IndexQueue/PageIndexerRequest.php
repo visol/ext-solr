@@ -124,7 +124,7 @@ class Tx_Solr_IndexQueue_PageIndexerRequest {
 	 */
 	public function send($url) {
 		$headers  = $this->getHeaders();
-		$response = t3lib_div::makeInstance('Tx_Solr_IndexQueue_PageIndexerResponse');
+		$response = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_IndexQueue_PageIndexerResponse');
 
 		$parsedURL = parse_url($url);
 		if (!preg_match('/^https?/', $parsedURL['scheme'])) {
@@ -147,7 +147,7 @@ class Tx_Solr_IndexQueue_PageIndexerRequest {
 		$decodedResponse = $response->getResultsFromJson($rawResponse);
 
 		if ($rawResponse === FALSE || $decodedResponse === FALSE) {
-			t3lib_div::devLog(
+			\TYPO3\CMS\Core\Utility\GeneralUtility::devLog(
 				'Failed to execute Page Indexer Request. Request ID: ' . $this->requestId,
 				'solr',
 				3,

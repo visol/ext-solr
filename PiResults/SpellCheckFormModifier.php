@@ -41,7 +41,7 @@ class Tx_Solr_PiResults_SpellCheckFormModifier implements Tx_Solr_FormModifier {
 	 * @return	array	Array with additional markers for suggestions
 	 */
 	public function modifyForm(array $markers, Tx_Solr_Template $template) {
-		$spellChecker = t3lib_div::makeInstance('Tx_Solr_SpellChecker');
+		$spellChecker = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_SpellChecker');
 		$suggestionsLink = $spellChecker->getSpellCheckingSuggestions();
 
 		if (!empty($suggestionsLink)) {

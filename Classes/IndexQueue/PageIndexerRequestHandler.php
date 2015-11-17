@@ -31,7 +31,7 @@
  * @package	TYPO3
  * @subpackage	solr
  */
-class Tx_Solr_IndexQueue_PageIndexerRequestHandler implements t3lib_Singleton {
+class Tx_Solr_IndexQueue_PageIndexerRequestHandler implements \TYPO3\CMS\Core\SingletonInterface {
 
 	/**
 	 * Index Queue page indexer request.
@@ -61,12 +61,12 @@ class Tx_Solr_IndexQueue_PageIndexerRequestHandler implements t3lib_Singleton {
 	 *
 	 */
 	public function __construct() {
-		$this->dispatcher = t3lib_div::makeInstance('Tx_Solr_IndexQueue_FrontendHelper_Dispatcher');
+		$this->dispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_IndexQueue_FrontendHelper_Dispatcher');
 
-		$this->request    = t3lib_div::makeInstance('Tx_Solr_IndexQueue_PageIndexerRequest',
+		$this->request    = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_IndexQueue_PageIndexerRequest',
 			$_SERVER['HTTP_X_TX_SOLR_IQ']
 		);
-		$this->response   = t3lib_div::makeInstance('Tx_Solr_IndexQueue_PageIndexerResponse');
+		$this->response   = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_IndexQueue_PageIndexerResponse');
 		$this->response->setRequestId($this->request->getRequestId());
 	}
 
@@ -79,7 +79,7 @@ class Tx_Solr_IndexQueue_PageIndexerRequestHandler implements t3lib_Singleton {
 	 */
 	public function run() {
 		if (!$this->request->isAuthenticated()) {
-			t3lib_div::devLog(
+			\TYPO3\CMS\Core\Utility\GeneralUtility::devLog(
 				'Invalid Index Queue Frontend Request detected!',
 				'solr',
 				3,

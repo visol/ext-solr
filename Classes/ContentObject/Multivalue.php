@@ -78,7 +78,7 @@ class Tx_Solr_ContentObject_Multivalue {
 			$removeEmptyValues = FALSE;
 		}
 
-		$listAsArray = t3lib_div::trimExplode(
+		$listAsArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(
 			$configuration['separator'],
 			$data,
 			$removeEmptyValues

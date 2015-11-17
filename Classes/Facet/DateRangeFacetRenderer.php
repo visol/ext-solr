@@ -78,8 +78,8 @@ class Tx_Solr_Facet_DateRangeFacetRenderer extends Tx_Solr_Facet_AbstractFacetRe
 	 * tbd
 	 */
 	protected function buildAddFacetUrl($facetName) {
-		$facetOption      = t3lib_div::makeInstance('Tx_Solr_Facet_FacetOption', $this->facetName, '');
-		$facetLinkBuilder = t3lib_div::makeInstance('Tx_Solr_Facet_LinkBuilder', $this->search->getQuery(), $this->facetName, $facetOption);
+		$facetOption      = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Facet_FacetOption', $this->facetName, '');
+		$facetLinkBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Facet_LinkBuilder', $this->search->getQuery(), $this->facetName, $facetOption);
 		$facetLinkBuilder->setLinkTargetPageId($this->linkTargetPageId);
 
 		return $facetLinkBuilder->getAddFacetOptionUrl();
@@ -90,7 +90,7 @@ class Tx_Solr_Facet_DateRangeFacetRenderer extends Tx_Solr_Facet_AbstractFacetRe
 	 *
 	 */
 	protected function loadJavaScriptFiles() {
-		$javascriptManager = t3lib_div::makeInstance('Tx_Solr_JavascriptManager');
+		$javascriptManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_JavascriptManager');
 
 		$javascriptManager->loadFile('library');
 		$javascriptManager->loadFile('ui');

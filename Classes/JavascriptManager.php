@@ -97,7 +97,7 @@ class Tx_Solr_JavascriptManager {
 			if (!empty($fileReference)) {
 				self::$files[$fileKey] = array(
 					'addedToPage' => FALSE,
-					'file'        => t3lib_div::createVersionNumberedFilename($GLOBALS['TSFE']->tmpl->getFileName($fileReference))
+					'file'        => \TYPO3\CMS\Core\Utility\GeneralUtility::createVersionNumberedFilename($GLOBALS['TSFE']->tmpl->getFileName($fileReference))
 				);
 			}
 		}
@@ -160,9 +160,9 @@ class Tx_Solr_JavascriptManager {
 	 * Adds all the loaded javascript files and snippets to the page footer.
 	 *
 	 * @param array Array of parameters - not used
-	 * @param tslib_fe TYPO3 Frontend
+	 * @param \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController TYPO3 Frontend
 	 */
-	public function addJavascriptToPageFooter($parameters, tslib_fe $parentObject) {
+	public function addJavascriptToPageFooter($parameters, \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $parentObject) {
 		$this->buildJavascriptTags();
 
 		$parentObject->content = str_replace(

@@ -95,7 +95,7 @@ class Tx_Solr_Facet_FacetRendererFactory {
 			$facetRendererClassName = $this->getFacetRendererClassNameByFacetType($facetConfiguration['type']);
 		}
 
-		$facetRenderer = t3lib_div::makeInstance($facetRendererClassName, $facet);
+		$facetRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($facetRendererClassName, $facet);
 		$this->validateObjectIsFacetRenderer($facetRenderer);
 
 		return $facetRenderer;
@@ -167,7 +167,7 @@ class Tx_Solr_Facet_FacetRendererFactory {
 		&& !empty(self::$facetTypes[$facetConfiguration['type']]['filterEncoder'])) {
 			$filterEncoderClassName = self::$facetTypes[$facetConfiguration['type']]['filterEncoder'];
 
-			$filterEncoder = t3lib_div::makeInstance($filterEncoderClassName);
+			$filterEncoder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($filterEncoderClassName);
 			$this->validateObjectIsQueryFilterEncoder($filterEncoder);
 		}
 
@@ -204,7 +204,7 @@ class Tx_Solr_Facet_FacetRendererFactory {
 		&& !empty(self::$facetTypes[$facetConfiguration['type']]['queryFacetBuilder'])) {
 			$queryFacetBuilderClassName = self::$facetTypes[$facetConfiguration['type']]['queryFacetBuilder'];
 
-			$queryFacetBuilder = t3lib_div::makeInstance($queryFacetBuilderClassName);
+			$queryFacetBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($queryFacetBuilderClassName);
 			$this->validateObjectIsQueryFacetBuilder($queryFacetBuilder);
 		}
 

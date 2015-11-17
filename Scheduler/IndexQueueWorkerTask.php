@@ -68,7 +68,7 @@ class Tx_Solr_Scheduler_IndexQueueWorkerTask extends tx_scheduler_Task implement
 	 */
 	protected function indexItems() {
 		$limit      = $this->documentsToIndexLimit;
-		$indexQueue = t3lib_div::makeInstance('Tx_Solr_IndexQueue_Queue');
+		$indexQueue = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_IndexQueue_Queue');
 
 			// get items to index
 		$itemsToIndex = $indexQueue->getItemsToIndex($this->site, $limit);
@@ -82,7 +82,7 @@ class Tx_Solr_Scheduler_IndexQueueWorkerTask extends tx_scheduler_Task implement
 					$e->getCode() . ': ' . $e->__toString()
 				);
 
-				t3lib_div::devLog(
+				\TYPO3\CMS\Core\Utility\GeneralUtility::devLog(
 					'Failed indexing Index Queue item ' . $itemToIndex->getIndexQueueUid(),
 					'solr',
 					3,
@@ -137,7 +137,7 @@ class Tx_Solr_Scheduler_IndexQueueWorkerTask extends tx_scheduler_Task implement
 	protected function cleanIndex() {
 		if (rand(1, 100) == 50) {
 				// clean the index about once in every 100 executions
-			$garbageCollector = t3lib_div::makeInstance('Tx_Solr_GarbageCollector');
+			$garbageCollector = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_GarbageCollector');
 			$garbageCollector->cleanIndex($this->site, FALSE);
 		}
 	}
@@ -169,7 +169,7 @@ class Tx_Solr_Scheduler_IndexQueueWorkerTask extends tx_scheduler_Task implement
 			$indexerOptions = $this->configuration['index.']['queue.'][$indexingConfigurationName . '.']['indexer.'];
 		}
 
-		$indexer = t3lib_div::makeInstance($indexerClass, $indexerOptions);
+		$indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($indexerClass, $indexerOptions);
 		if (!($indexer instanceof Tx_Solr_IndexQueue_Indexer)) {
 			throw new RuntimeException(
 				'The indexer class "' . $indexerClass . '" for indexing configuration "' . $indexingConfigurationName . '" is not a valid indexer. Must be a subclass of Tx_Solr_IndexQueue_Indexer.',
@@ -277,13 +277,13 @@ class Tx_Solr_Scheduler_IndexQueueWorkerTask extends tx_scheduler_Task implement
 		static $hosts = array();
 
 			// relevant for realURL environments, only
-		if (t3lib_extMgm::isLoaded('realurl')) {
+		if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('realurl')) {
 			$rootpageId = $item->getRootPageUid();
 			$hostFound  = !empty($hosts[$rootpageId]);
 
 			if (!$hostFound) {
-				$rootline = t3lib_BEfunc::BEgetRootLine($rootpageId);
-				$host     = t3lib_BEfunc::firstDomainRecord($rootline);
+				$rootline = \TYPO3\CMS\Backend\Utility\BackendUtility::BEgetRootLine($rootpageId);
+				$host     = \TYPO3\CMS\Backend\Utility\BackendUtility::firstDomainRecord($rootline);
 
 				$hosts[$rootpageId] = $host;
 			}

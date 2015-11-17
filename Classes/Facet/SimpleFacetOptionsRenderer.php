@@ -130,13 +130,13 @@ class Tx_Solr_Facet_SimpleFacetOptionsRenderer implements Tx_Solr_FacetOptionsRe
 				continue;
 			}
 
-			$facetOption = t3lib_div::makeInstance('Tx_Solr_Facet_FacetOption',
+			$facetOption = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Facet_FacetOption',
 				$this->facetName,
 				$facetOption,
 				$facetOptionResultCount
 			);	/* @var $facetOption Tx_Solr_Facet_FacetOption */
 
-			$facetLinkBuilder = t3lib_div::makeInstance('Tx_Solr_Facet_LinkBuilder',
+			$facetLinkBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Facet_LinkBuilder',
 				$this->query,
 				$this->facetName,
 				$facetOption
@@ -191,7 +191,7 @@ class Tx_Solr_Facet_SimpleFacetOptionsRenderer implements Tx_Solr_FacetOptionsRe
 	protected function sortFacetOptionsByUserDefinedOrder() {
 		$sortedOptions = array();
 
-		$manualFacetOptionSortOrder = t3lib_div::trimExplode(',', $this->facetConfiguration['manualSortOrder']);
+		$manualFacetOptionSortOrder = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->facetConfiguration['manualSortOrder']);
 		$availableFacetOptions      = array_keys($this->facetOptions);
 
 			// move the configured options to the top, in their defined order

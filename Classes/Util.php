@@ -275,7 +275,7 @@ class Tx_Solr_Util {
 		if ($initializeTsfe) {
 			self::initializeTsfe($pageId, $language);
 
-			$tmpl = t3lib_div::makeInstance('t3lib_tsparser_ext');
+			$tmpl = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\TypoScript\\ExtendedTemplateService');
 			$configuration = $tmpl->ext_getSetup(
 				$GLOBALS['TSFE']->tmpl->setup,
 				$path
@@ -285,10 +285,10 @@ class Tx_Solr_Util {
 		} else {
 			if (!isset($configurationCache[$cacheId])) {
 				if (is_int($language)) {
-					t3lib_div::_GETset($language, 'L');
+					\TYPO3\CMS\Core\Utility\GeneralUtility::_GETset($language, 'L');
 				}
 
-				$pageSelect = t3lib_div::makeInstance('t3lib_pageSelect');
+				$pageSelect = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Page\\PageRepository');
 				$rootLine   = $pageSelect->getRootLine($pageId);
 
 				if (empty($GLOBALS['TSFE']->sys_page)) {
@@ -303,7 +303,7 @@ class Tx_Solr_Util {
 					$GLOBALS['TSFE']->sys_page = $pageSelect;
 				}
 
-				$tmpl = t3lib_div::makeInstance('t3lib_tsparser_ext');
+				$tmpl = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\TypoScript\\ExtendedTemplateService');
 				$tmpl->tt_track = FALSE; // Do not log time-performance information
 				$tmpl->init();
 				$tmpl->runThroughTemplates($rootLine); // This generates the constants/config + hierarchy info for the template.
@@ -335,22 +335,22 @@ class Tx_Solr_Util {
 		$cacheId = $pageId . '|' . $language;
 
 		if (!is_object($GLOBALS['TT'])) {
-			$GLOBALS['TT'] = t3lib_div::makeInstance('t3lib_TimeTrackNull');
+			$GLOBALS['TT'] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\TimeTracker\\NullTimeTracker');
 		}
 
 		if (!isset($tsfeCache[$cacheId]) || !$useCache) {
-			t3lib_div::_GETset($language, 'L');
+			\TYPO3\CMS\Core\Utility\GeneralUtility::_GETset($language, 'L');
 
-			$GLOBALS['TSFE'] = t3lib_div::makeInstance('tslib_fe', $GLOBALS['TYPO3_CONF_VARS'], $pageId, 0);
+			$GLOBALS['TSFE'] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController', $GLOBALS['TYPO3_CONF_VARS'], $pageId, 0);
 
 				// for certain situations we need to trick TSFE into granting us
 				// access to the page in any case to make getPageAndRootline() work
 				// see http://forge.typo3.org/issues/42122
-			$pageRecord = t3lib_BEfunc::getRecord('pages', $pageId);
+			$pageRecord = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord('pages', $pageId);
 			$groupListBackup = $GLOBALS['TSFE']->gr_list;
 			$GLOBALS['TSFE']->gr_list = $pageRecord['fe_group'];
 
-			$GLOBALS['TSFE']->sys_page = t3lib_div::makeInstance('t3lib_pageSelect');
+			$GLOBALS['TSFE']->sys_page = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Page\\PageRepository');
 			$GLOBALS['TSFE']->getPageAndRootline();
 
 				// restore gr_list
@@ -398,7 +398,7 @@ class Tx_Solr_Util {
 
 			// fallback, backend
 		if ($pageId != 0 && (empty($rootLine) || !self::rootlineContainsRootPage($rootLine))) {
-			$pageSelect = t3lib_div::makeInstance('t3lib_pageSelect');
+			$pageSelect = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Page\\PageRepository');
 			$rootLine   = $pageSelect->getRootLine($pageId, '', TRUE);
 		}
 
@@ -440,7 +440,7 @@ class Tx_Solr_Util {
 	public static function isRootPage($pageId) {
 		$isRootPage = FALSE;
 
-		$page = t3lib_BEfunc::getRecord('pages', $pageId);
+		$page = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord('pages', $pageId);
 		if ($page['is_siteroot']) {
 			$isRootPage = TRUE;
 		}
@@ -589,8 +589,8 @@ class Tx_Solr_Util {
 	public static function isDraftRecord($table, $uid) {
 		$isWorkspaceRecord = FALSE;
 
-		if (t3lib_BEfunc::isTableWorkspaceEnabled($table)) {
-			$record = t3lib_BEfunc::getRecord($table, $uid);
+		if (\TYPO3\CMS\Backend\Utility\BackendUtility::isTableWorkspaceEnabled($table)) {
+			$record = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($table, $uid);
 
 			if ($record['pid'] == '-1' || $record['t3ver_state'] > 0) {
 				$isWorkspaceRecord = TRUE;
@@ -631,7 +631,7 @@ class Tx_Solr_Util {
 	 */
 	public static function getAllowedPageTypes($pageId) {
 		$configuration = self::getConfigurationFromPageId($pageId, 'plugin.tx_solr');
-		$allowedPageTypes = t3lib_div::trimExplode(',', $configuration['index.']['queue.']['pages.']['allowedPageTypes']);
+		$allowedPageTypes = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $configuration['index.']['queue.']['pages.']['allowedPageTypes']);
 
 		return $allowedPageTypes;
 	}

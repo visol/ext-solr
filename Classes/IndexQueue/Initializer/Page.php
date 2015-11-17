@@ -125,7 +125,7 @@ class Tx_Solr_IndexQueue_Initializer_Page extends Tx_Solr_IndexQueue_Initializer
 			} else {
 					// Add page like a regular page, as only the sub tree is
 					// mounted. The page itself has its own content.
-				t3lib_div::makeInstance('Tx_Solr_IndexQueue_Queue')->updateItem(
+				\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_IndexQueue_Queue')->updateItem(
 					$this->type,
 					$mountPage['uid'],
 					$this->indexingConfigurationName
@@ -148,7 +148,7 @@ class Tx_Solr_IndexQueue_Initializer_Page extends Tx_Solr_IndexQueue_Initializer
 			} catch (Exception $e) {
 				Tx_Solr_DatabaseUtility::transactionRollback();
 
-				t3lib_div::devLog(
+				\TYPO3\CMS\Core\Utility\GeneralUtility::devLog(
 					'Index Queue initialization failed for mount pages',
 					'solr',
 					3,
@@ -173,29 +173,29 @@ class Tx_Solr_IndexQueue_Initializer_Page extends Tx_Solr_IndexQueue_Initializer
 		if (empty($mountPage['mountPageSource'])) {
 			$isValidMountPage = FALSE;
 
-			$flashMessage = t3lib_div::makeInstance(
-				't3lib_FlashMessage',
+			$flashMessage = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+				'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
 				'Property "Mounted page" must not be empty. Invalid Mount Page configuration for page ID ' . $mountPage['uid'] . '.',
 				'Failed to initialize Mount Page tree. ',
-				t3lib_FlashMessage::ERROR
+				\TYPO3\CMS\Core\Messaging\FlashMessage::ERROR
 			);
-			t3lib_FlashMessageQueue::addMessage($flashMessage);
+			\TYPO3\CMS\Core\Messaging\FlashMessageQueue::addMessage($flashMessage);
 		}
 
 		if (!$this->mountedPageExists($mountPage['mountPageSource'])) {
 			$isValidMountPage = FALSE;
 
-			$flashMessage = t3lib_div::makeInstance(
-				't3lib_FlashMessage',
+			$flashMessage = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+				'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
 				'The mounted page must be accessible in the frontend. '
 					. 'Invalid Mount Page configuration for page ID '
 					. $mountPage['uid'] . ', the mounted page with ID '
 					. $mountPage['mountPageSource']
 					. ' is not accessible in the frontend.',
 				'Failed to initialize Mount Page tree. ',
-				t3lib_FlashMessage::ERROR
+				\TYPO3\CMS\Core\Messaging\FlashMessage::ERROR
 			);
-			t3lib_FlashMessageQueue::addMessage($flashMessage);
+			\TYPO3\CMS\Core\Messaging\FlashMessageQueue::addMessage($flashMessage);
 		}
 
 		return $isValidMountPage;
@@ -212,7 +212,7 @@ class Tx_Solr_IndexQueue_Initializer_Page extends Tx_Solr_IndexQueue_Initializer
 	protected function mountedPageExists($mountedPageId) {
 		$mountedPageExists = FALSE;
 
-		$mountedPage = t3lib_BEfunc::getRecord('pages', $mountedPageId, '*', ' AND hidden = 0');
+		$mountedPage = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord('pages', $mountedPageId, '*', ' AND hidden = 0');
 		if (!empty($mountedPage)) {
 			$mountedPageExists = TRUE;
 		}
@@ -260,7 +260,7 @@ class Tx_Solr_IndexQueue_Initializer_Page extends Tx_Solr_IndexQueue_Initializer
 		);
 
 		foreach ($mountPageItems as $mountPageItemRecord) {
-			$mountPageItem = t3lib_div::makeInstance('Tx_Solr_IndexQueue_Item', $mountPageItemRecord);
+			$mountPageItem = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_IndexQueue_Item', $mountPageItemRecord);
 
 			$mountPageItem->setIndexingProperty('mountPageSource',      $mountPage['mountPageSource']);
 			$mountPageItem->setIndexingProperty('mountPageDestination', $mountPage['mountPageDestination']);

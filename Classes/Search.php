@@ -30,7 +30,7 @@
  * @package	TYPO3
  * @subpackage	solr
  */
-class Tx_Solr_Search implements t3lib_Singleton {
+class Tx_Solr_Search implements \TYPO3\CMS\Core\SingletonInterface {
 
 	/**
 	 * An instance of the Solr service
@@ -72,7 +72,7 @@ class Tx_Solr_Search implements t3lib_Singleton {
 		$this->solr = $solrConnection;
 
 		if (is_null($solrConnection)) {
-			$this->solr = t3lib_div::makeInstance('Tx_Solr_ConnectionManager')->getConnectionByPageId(
+			$this->solr = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_ConnectionManager')->getConnectionByPageId(
 				$GLOBALS['TSFE']->id,
 				$GLOBALS['TSFE']->sys_language_uid
 			);
@@ -118,7 +118,7 @@ class Tx_Solr_Search implements t3lib_Singleton {
 			);
 
 			if ($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_solr.']['logging.']['query.']['queryString']) {
-				t3lib_div::devLog('Querying Solr, getting result', 'solr', 0, array(
+				\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('Querying Solr, getting result', 'solr', 0, array(
 					'query string'     => $query->getQueryString(),
 					'query parameters' => $query->getQueryParameters(),
 					'response'         => json_decode($response->getRawResponse(), TRUE)
@@ -128,7 +128,7 @@ class Tx_Solr_Search implements t3lib_Singleton {
 			$response = $this->solr->getResponse();
 
 			if ($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_solr.']['logging.']['exceptions']) {
-				t3lib_div::devLog('Exception while querying Solr', 'solr', 3, array(
+				\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('Exception while querying Solr', 'solr', 3, array(
 					'exception' => $e->__toString(),
 					'query'     => (array) $query,
 					'offset'    => $offset,
@@ -154,7 +154,7 @@ class Tx_Solr_Search implements t3lib_Singleton {
 			// hook to modify the search query
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['modifySearchQuery'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['modifySearchQuery'] as $classReference) {
-				$queryModifier = t3lib_div::getUserObj($classReference);
+				$queryModifier = \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($classReference);
 
 				if ($queryModifier instanceof Tx_Solr_QueryModifier) {
 					if ($queryModifier instanceof Tx_Solr_SearchAware) {
@@ -186,7 +186,7 @@ class Tx_Solr_Search implements t3lib_Singleton {
 			// hook to modify the search response
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['modifySearchResponse'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['modifySearchResponse'] as $classReference) {
-				$responseModifier = t3lib_div::getUserObj($classReference);
+				$responseModifier = \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($classReference);
 
 				if ($responseModifier instanceof Tx_Solr_ResponseModifier) {
 					if ($responseModifier instanceof Tx_Solr_SearchAware) {
@@ -226,7 +226,7 @@ class Tx_Solr_Search implements t3lib_Singleton {
 			$solrAvailable = TRUE;
 		} catch (Exception $e) {
 			if ($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_solr.']['logging.']['exceptions']) {
-				t3lib_div::devLog('exception while trying to ping the solr server', 'solr', 3, array(
+				\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('exception while trying to ping the solr server', 'solr', 3, array(
 					$e->__toString()
 				));
 			}
@@ -313,7 +313,7 @@ class Tx_Solr_Search implements t3lib_Singleton {
 				$facetCounts = $unmodifiedFacetCounts;
 
 				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['modifyFacets'] as $classReference) {
-					$facetsModifier = t3lib_div::getUserObj($classReference);
+					$facetsModifier = \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($classReference);
 
 					if ($facetsModifier instanceof Tx_Solr_FacetsModifier) {
 						$facetCounts = $facetsModifier->modifyFacets($facetCounts);
@@ -353,7 +353,7 @@ class Tx_Solr_Search implements t3lib_Singleton {
 				// and facet.range Solr does that on its own automatically
 			$facetQuery = preg_replace('/^\{!ex=[^\}]*\}(.*)/', '\\1', $facetQuery);
 
-			if (t3lib_div::isFirstPartOfStr($facetQuery, $facetField)) {
+			if (\TYPO3\CMS\Core\Utility\GeneralUtility::isFirstPartOfStr($facetQuery, $facetField)) {
 				$options[$facetQuery] = $numberOfResults;
 			}
 		}

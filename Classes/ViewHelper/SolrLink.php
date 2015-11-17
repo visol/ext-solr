@@ -55,11 +55,11 @@ class Tx_Solr_ViewHelper_SolrLink implements Tx_Solr_ViewHelper {
 	 */
 	public function __construct(array $arguments = array()) {
 		if(is_null($this->contentObject)) {
-			$this->contentObject = t3lib_div::makeInstance('tslib_cObj');
+			$this->contentObject = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
 		}
 
 		if(is_null($this->search)) {
-			$this->search = t3lib_div::makeInstance('Tx_Solr_Search');
+			$this->search = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Search');
 		}
 	}
 
@@ -78,7 +78,7 @@ class Tx_Solr_ViewHelper_SolrLink implements Tx_Solr_ViewHelper {
 		$returnOnlyUrl            = $arguments[4] ? TRUE : FALSE;
 
 			// FIXME pass anything not prefixed with tx_solr in $additionalParameters as 4th parameter
-		$additionalUrlParameters = t3lib_div::explodeUrl2Array($additionalUrlParameters, TRUE);
+		$additionalUrlParameters = \TYPO3\CMS\Core\Utility\GeneralUtility::explodeUrl2Array($additionalUrlParameters, TRUE);
 		$solrUrlParameters = array();
 		if (!empty($additionalUrlParameters['tx_solr'])) {
 			$solrUrlParameters = $additionalUrlParameters['tx_solr'];
@@ -93,10 +93,10 @@ class Tx_Solr_ViewHelper_SolrLink implements Tx_Solr_ViewHelper {
 		if ($this->search->hasSearched()) {
 			$query = $this->search->getQuery();
 		} else {
-			$query = t3lib_div::makeInstance('Tx_Solr_Query', '');
+			$query = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Query', '');
 		}
 
-		$linkBuilder = t3lib_div::makeInstance('Tx_Solr_Query_LinkBuilder', $query);
+		$linkBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Query_LinkBuilder', $query);
 		$linkBuilder->setLinkTargetPageId($pageId);
 		$queryLink = $linkBuilder->getQueryLink(
 			$linkText,

@@ -63,12 +63,12 @@ class Tx_Solr_Facet_UsedFacetRenderer extends Tx_Solr_Facet_SimpleFacetOptionsRe
 	public function render() {
 		$solrConfiguration = Tx_Solr_Util::getSolrConfiguration();
 
-		$facetOption = t3lib_div::makeInstance('Tx_Solr_Facet_FacetOption',
+		$facetOption = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Facet_FacetOption',
 			$this->facetName,
 			$this->filterValue
 		);
 
-		$facetLinkBuilder = t3lib_div::makeInstance('Tx_Solr_Facet_LinkBuilder',
+		$facetLinkBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Facet_LinkBuilder',
 			$this->query,
 			$this->facetName,
 			$facetOption
@@ -77,16 +77,16 @@ class Tx_Solr_Facet_UsedFacetRenderer extends Tx_Solr_Facet_SimpleFacetOptionsRe
 
 		if ($this->facetConfiguration['type'] == 'hierarchy') {
 				// FIXME decouple this
-			$filterEncoder = t3lib_div::makeInstance('Tx_Solr_Query_FilterEncoder_Hierarchy');
-			$facet         = t3lib_div::makeInstance('Tx_Solr_Facet_Facet', $this->facetName);
-			$facetRenderer = t3lib_div::makeInstance('Tx_Solr_Facet_HierarchicalFacetRenderer', $facet);
+			$filterEncoder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Query_FilterEncoder_Hierarchy');
+			$facet         = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Facet_Facet', $this->facetName);
+			$facetRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Facet_HierarchicalFacetRenderer', $facet);
 
 			$facetText = $facetRenderer->getLastPathSegmentFromHierarchicalFacetOption($filterEncoder->decodeFilter($this->filterValue));
 		} else {
 			$facetText = $facetOption->render();
 		}
 
-		$contentObject = t3lib_div::makeInstance('tslib_cObj');
+		$contentObject = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
 		$facetLabel = $contentObject->stdWrap(
 			$solrConfiguration['search.']['faceting.']['facets.'][$this->facetName . '.']['label'],
 			$solrConfiguration['search.']['faceting.']['facets.'][$this->facetName . '.']['label.']

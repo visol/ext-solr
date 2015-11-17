@@ -89,7 +89,7 @@ class Tx_Solr_Access_Rootline {
 
 			foreach ($rawRootlineElements as $rawRootlineElement) {
 				try {
-					$this->push(t3lib_div::makeInstance(
+					$this->push(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
 						'Tx_Solr_Access_RootlineElement',
 						$rawRootlineElement
 					));
@@ -167,9 +167,9 @@ class Tx_Solr_Access_Rootline {
 	 * @return	Tx_Solr_Access_Rootline	Access Rootline for the given page Id.
 	 */
 	public static function getAccessRootlineByPageId($pageId) {
-		$accessRootline = t3lib_div::makeInstance('Tx_Solr_Access_Rootline');
+		$accessRootline = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_Access_Rootline');
 
-		$pageSelector = t3lib_div::makeInstance('t3lib_pageSelect');
+		$pageSelector = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Page\\PageRepository');
 		$pageSelector->init(FALSE);
 		$rootline = $pageSelector->getRootLine($pageId);
 		$rootline = array_reverse($rootline);
@@ -180,7 +180,7 @@ class Tx_Solr_Access_Rootline {
 				&& $pageRecord['extendToSubpages']
 				&& $pageRecord['uid'] != $pageId
 			) {
-				$accessRootline->push(t3lib_div::makeInstance(
+				$accessRootline->push(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
 					'Tx_Solr_Access_RootlineElement',
 					$pageRecord['uid'] . Tx_Solr_Access_RootlineElement::PAGE_ID_GROUP_DELIMITER . $pageRecord['fe_group']
 				));
@@ -190,7 +190,7 @@ class Tx_Solr_Access_Rootline {
 			// current page
 		$currentPageRecord = $pageSelector->getPage($pageId);
 		if ($currentPageRecord['fe_group']) {
-			$accessRootline->push(t3lib_div::makeInstance(
+			$accessRootline->push(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
 				'Tx_Solr_Access_RootlineElement',
 				$currentPageRecord['uid'] . Tx_Solr_Access_RootlineElement::PAGE_ID_GROUP_DELIMITER . $currentPageRecord['fe_group']
 			));

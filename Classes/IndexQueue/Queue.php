@@ -120,7 +120,7 @@ class Tx_Solr_IndexQueue_Queue {
 
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['postProcessIndexQueueInitialization'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['postProcessIndexQueueInitialization'] as $classReference) {
-				$indexQueueInitializationPostProcessor = t3lib_div::getUserObj($classReference);
+				$indexQueueInitializationPostProcessor = \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($classReference);
 
 				if ($indexQueueInitializationPostProcessor instanceof Tx_Solr_IndexQueueInitializationPostProcessor) {
 					$indexQueueInitializationPostProcessor->postProcessIndexQueueInitialization(
@@ -158,7 +158,7 @@ class Tx_Solr_IndexQueue_Queue {
 		$tableToIndex     = $this->getTableToIndexByIndexingConfigurationName($solrConfiguration, $indexingConfigurationName);
 		$initializerClass = $this->resolveInitializerClass($solrConfiguration, $indexingConfigurationName);
 
-		$initializer = t3lib_div::makeInstance($initializerClass);
+		$initializer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($initializerClass);
 		/** @var $initializer Tx_Solr_IndexQueue_Initializer_Abstract */
 		$initializer->setSite($site);
 		$initializer->setType($tableToIndex);
@@ -327,7 +327,7 @@ class Tx_Solr_IndexQueue_Queue {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'uid',
 				'pages',
-				'pid = ' . $startPageId . ' ' . t3lib_BEfunc::deleteClause('pages')
+				'pid = ' . $startPageId . ' ' . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('pages')
 			);
 
 			while ($page = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
@@ -404,7 +404,7 @@ class Tx_Solr_IndexQueue_Queue {
 			$additionalRecordFields = ', doktype, uid';
 		}
 
-		$record = t3lib_BEfunc::getRecord($itemType, $itemUid, 'pid' . $additionalRecordFields);
+		$record = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($itemType, $itemUid, 'pid' . $additionalRecordFields);
 
 		// FIXME temporary until we have a query builder to take care of this
 		if (empty($record) || ($itemType == 'pages' && !Tx_Solr_Util::isAllowedPageType($record))) {
@@ -443,7 +443,7 @@ class Tx_Solr_IndexQueue_Queue {
 				// Ensure additionalWhereClause is applied.
 				$solrConfiguration = tx_solr_Util::getSolrConfigurationFromPageId($record['pid']);
 				if (!empty($solrConfiguration['index.']['queue.'][$item['indexing_configuration'] . '.']['additionalWhereClause'])) {
-					$record = t3lib_BEfunc::getRecord(
+					$record = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord(
 						$itemType,
 						$itemUid,
 						'pid' . $additionalRecordFields,
@@ -494,7 +494,7 @@ class Tx_Solr_IndexQueue_Queue {
 			$changedTimeColumns .= ', content_from_pid';
 		}
 
-		$record          = t3lib_BEfunc::getRecord($itemType, $itemUid, $changedTimeColumns);
+		$record          = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($itemType, $itemUid, $changedTimeColumns);
 		$itemChangedTime = $record[$GLOBALS['TCA'][$itemType]['ctrl']['tstamp']];
 
 		if ($itemTypeHasStartTimeColumn) {
@@ -764,7 +764,7 @@ class Tx_Solr_IndexQueue_Queue {
 		if (count($indexQueueItemRecord) == 1) {
 			$indexQueueItemRecord = $indexQueueItemRecord[0];
 
-			$item = t3lib_div::makeInstance(
+			$item = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
 				'Tx_Solr_IndexQueue_Item',
 				$indexQueueItemRecord
 			);
@@ -881,13 +881,13 @@ class Tx_Solr_IndexQueue_Queue {
 		// records to index queue items
 		foreach ($indexQueueItemRecords as $indexQueueItemRecord) {
 			if (isset($tableRecords[$indexQueueItemRecord['item_type']][$indexQueueItemRecord['item_uid']])) {
-				$indexQueueItems[] = t3lib_div::makeInstance(
+				$indexQueueItems[] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
 					'Tx_Solr_IndexQueue_Item',
 					$indexQueueItemRecord,
 					$tableRecords[$indexQueueItemRecord['item_type']][$indexQueueItemRecord['item_uid']]
 				);
 			} else {
-				t3lib_div::devLog('Record missing for Index Queue item. Item removed.', 'solr', 3, array($indexQueueItemRecord));
+				\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('Record missing for Index Queue item. Item removed.', 'solr', 3, array($indexQueueItemRecord));
 				$this->deleteItem($indexQueueItemRecord['item_type'], $indexQueueItemRecord['item_uid']);
 			}
 		}
