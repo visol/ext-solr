@@ -24,5 +24,23 @@
 	"require": {
 		"php": ">=5.3.7 <6.0",
 		"typo3/cms-core": ">=6.2.14,<8.0"
+	},
+	"autoload": {
+		"classmap": [
+			"Lib/",
+			"Classes/",
+			"CliApi/",
+			"Compat/",
+			"EidApi/",
+			"EidSuggest/",
+			"Interfaces/",
+			"ModAdmin/",
+			"ModIndex/",
+			"PiFrequentSearches/",
+			"PiResults/",
+			"PiSearch/",
+			"Report/",
+			"Scheduler/"
+		]
 	}
 }
