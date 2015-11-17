@@ -30,7 +30,7 @@
  * @package	TYPO3
  * @subpackage	solr
  */
-class Tx_Solr_Report_IndexReport implements tx_reports_Report {
+class Tx_Solr_Report_IndexReport implements \TYPO3\CMS\Reports\ReportInterface {
 
 	protected $reportsModule;
 

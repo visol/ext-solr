@@ -23,10 +23,6 @@
 ***************************************************************/
 
 
-if (version_compare(TYPO3_version, '6.1', '<=')) {
-	require_once(PATH_typo3 . 'interfaces/interface.backend_cacheActionsHook.php');
-}
-
 /**
  * A class to easily create a connection to a Solr server.
  *
@@ -301,7 +297,7 @@ class Tx_Solr_ConnectionManager implements \TYPO3\CMS\Core\SingletonInterface, \
 			$cacheActions[] = array(
 				'id'    => 'clearSolrConnectionCache',
 				'title' => $title,
-				'href'  => $GLOBALS['BACK_PATH'] . 'ajax.php?ajaxID=solr::clearSolrConnectionCache',
+				'href'  => \TYPO3\CMS\Backend\Utility\BackendUtility::getAjaxUrl('solr::clearSolrConnectionCache'),
 				'icon'  => '<img '.\TYPO3\CMS\Backend\Utility\IconUtility::skinImg($GLOBALS['BACK_PATH'], \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('solr') . 'Resources/Images/cache-init-solr-connections.png', 'width="16" height="16"').' title="'.$title.'" alt="'.$title.'" />'
 			);
 			$optionValues[] = 'clearSolrConnectionCache';

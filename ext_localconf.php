@@ -7,13 +7,7 @@ $GLOBALS['PATH_solr'] = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extP
 
 # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- #
 
-$compatMode = FALSE;
-if (!\TYPO3\CMS\Core\Utility\GeneralUtility::compat_version('6.0')) {
-	$compatMode = TRUE;
-	require_once($GLOBALS['PATH_solr'] . 'Compat/interface.tx_scheduler_progressprovider.php');
-}
-
-define('SOLR_COMPAT', $compatMode);
+define('SOLR_COMPAT', FALSE);
 
    # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- # ----- #
 

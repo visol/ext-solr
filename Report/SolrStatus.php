@@ -31,7 +31,7 @@
  * @package	TYPO3
  * @subpackage	solr
  */
-class Tx_Solr_Report_SolrStatus implements tx_reports_StatusProvider {
+class Tx_Solr_Report_SolrStatus implements \TYPO3\CMS\Reports\StatusProviderInterface {
 
 	/**
 	 * Connection Manager
@@ -66,7 +66,7 @@ class Tx_Solr_Report_SolrStatus implements tx_reports_StatusProvider {
 	 */
 	protected function getConnectionStatus(array $solrConection) {
 		$value    = 'Your site was unable to contact the Apache Solr server.';
-		$severity = tx_reports_reports_status_Status::ERROR;
+		$severity = \TYPO3\CMS\Reports\Status::ERROR;
 
 		$solr = $this->connectionManager->getConnection(
 			$solrConection['solrHost'],
@@ -86,7 +86,7 @@ class Tx_Solr_Report_SolrStatus implements tx_reports_StatusProvider {
 		$pingQueryTime = $solr->ping();
 
 		if ($pingQueryTime !== FALSE) {
-			$severity = tx_reports_reports_status_Status::OK;
+			$severity = \TYPO3\CMS\Reports\Status::OK;
 			$value = 'Your site has contacted the Apache Solr server.';
 
 			$solrVersion = $this->formatSolrVersion($solr->getSolrServerVersion());
@@ -104,7 +104,7 @@ class Tx_Solr_Report_SolrStatus implements tx_reports_StatusProvider {
 
 		$message .= '</ul>';
 
-		return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_reports_reports_status_Status',
+		return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Reports\\Status',
 			'Apache Solr',
 			$value,
 			$message,

@@ -31,7 +31,7 @@
  * @package	TYPO3
  * @subpackage	solr
  */
-class Tx_Solr_Report_SolrConfigStatus implements tx_reports_StatusProvider {
+class Tx_Solr_Report_SolrConfigStatus implements \TYPO3\CMS\Reports\StatusProviderInterface {
 
 	/**
 	 * The config name property is constructed as follows:
@@ -96,11 +96,11 @@ class Tx_Solr_Report_SolrConfigStatus implements tx_reports_StatusProvider {
 					. '<li>Path: ' . $solrConnection->getPath() . '</li>
 					</ul>';
 
-				$status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_reports_reports_status_Status',
+				$status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Reports\\Status',
 					'Solrconfig Version',
 					'Unsupported solrconfig.xml',
 					$message,
-					tx_reports_reports_status_Status::WARNING
+					\TYPO3\CMS\Reports\Status::WARNING
 				);
 
 				$reports[] = $status;

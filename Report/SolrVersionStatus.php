@@ -31,7 +31,7 @@
  * @package	TYPO3
  * @subpackage	solr
  */
-class Tx_Solr_Report_SolrVersionStatus implements tx_reports_StatusProvider {
+class Tx_Solr_Report_SolrVersionStatus implements \TYPO3\CMS\Reports\StatusProviderInterface {
 
 	/**
 	 * Required Solr version. The version that gets installed when using the
@@ -74,11 +74,11 @@ class Tx_Solr_Report_SolrVersionStatus implements tx_reports_StatusProvider {
 						. '<li><strong>Version: ' . $this->formatSolrVersion($solrVersion) . '</strong></li>
 						</ul>';
 
-					$status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_reports_reports_status_Status',
+					$status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Reports\\Status',
 						'Apache Solr Version',
 						'Outdated, Unsupported',
 						$message,
-						tx_reports_reports_status_Status::ERROR
+						\TYPO3\CMS\Reports\Status::ERROR
 					);
 
 					$reports[] = $status;

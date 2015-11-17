@@ -31,7 +31,7 @@
  * @package	TYPO3
  * @subpackage	solr
  */
-class Tx_Solr_Report_SolrConfigurationStatus implements tx_reports_StatusProvider {
+class Tx_Solr_Report_SolrConfigurationStatus implements \TYPO3\CMS\Reports\StatusProviderInterface {
 
 	/**
 	 * Compiles a collection of configuration status checks.
@@ -73,13 +73,13 @@ class Tx_Solr_Report_SolrConfigurationStatus implements tx_reports_StatusProvide
 		$rootPages = $this->getRootPages();
 
 		if (empty($rootPages)) {
-			$status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_reports_reports_status_Status',
+			$status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Reports\\Status',
 				'Sites',
 				'No sites found',
 				'Connections to your Solr server are detected automatically.
 				To make this work you need to set the "Use as Root Page" page
 				property for your site root pages.',
-				tx_reports_reports_status_Status::ERROR
+				\TYPO3\CMS\Reports\Status::ERROR
 			);
 		}
 
@@ -122,13 +122,13 @@ class Tx_Solr_Report_SolrConfigurationStatus implements tx_reports_StatusProvide
 				$rootPagesWithoutDomain[$pageId] = '[' . $page['uid'] . '] ' . $page['title'];
 			}
 
-			$status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_reports_reports_status_Status',
+			$status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Reports\\Status',
 				'Domain Records',
 				'Domain records missing',
 				'Domain records are needed to properly index pages. The following
 				sites are marked as root pages, but do not have a domain configured:
 				<ul><li>' . implode('</li><li>', $rootPagesWithoutDomain) . '</li></ul>',
-				tx_reports_reports_status_Status::ERROR
+				\TYPO3\CMS\Reports\Status::ERROR
 			);
 		}
 
@@ -169,13 +169,13 @@ class Tx_Solr_Report_SolrConfigurationStatus implements tx_reports_StatusProvide
 				$rootPagesWithIndexingOff[$key] = '[' . $rootPageWithIndexingOff['uid'] . '] ' . $rootPageWithIndexingOff['title'];
 			}
 
-			$status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_reports_reports_status_Status',
+			$status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Reports\\Status',
 				'Page Indexing',
 				'Indexing is disabled',
 				'You need to set config.index_enable = 1 to allow page indexing.
 				The following sites were found with indexing disabled:
 				<ul><li>' . implode('</li><li>', $rootPagesWithIndexingOff) . '</li></ul>',
-				tx_reports_reports_status_Status::ERROR
+				\TYPO3\CMS\Reports\Status::ERROR
 			);
 		}
 
